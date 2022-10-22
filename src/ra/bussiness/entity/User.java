@@ -9,7 +9,7 @@ public class User implements Serializable {
     private String password;
     private String confirmPassword;
     private String fullName;
-    private boolean permission;
+    private boolean permission = false;
     private Date date;
     private boolean userStatus;
     private String userEmail;

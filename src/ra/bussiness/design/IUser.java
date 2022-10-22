@@ -2,12 +2,13 @@ package ra.bussiness.design;
 
 import ra.bussiness.entity.Catalog;
 import ra.bussiness.entity.Product;
+import ra.bussiness.entity.User;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public interface IUser extends IShop{
+public interface IUser<T,E> extends IShop<T,E>{
     void displayProductbyCatalog(List<Catalog> list);
     void displayProductbyDate(List<Product> list);
     void displayProductbyDiscount(List<Product> list);

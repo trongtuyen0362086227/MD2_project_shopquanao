@@ -89,22 +89,22 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         do {
             String catalogName = sc.nextLine();
             if (ShopValidate.checkempty(catalogName)) {
-               if (ShopValidate.checklenght(catalogName,6,30)){
-                   boolean check = true;
-                   for (Catalog cat: catalogList) {
-                       if (cat.getCatalogName().equals(catalogName)){
-                           check = false;
-                       }
-                   }
-                   if (check){
-                       catalogNew.setCatalogName(catalogName);
-                       break;
-                   } else {
-                       System.err.println(ShopMessage.CATALOGMESSAGE_EXIST);
-                   }
-               } else {
-                   System.err.println(ShopMessage.CATALOGMESSAGE_LENGHT);
-               }
+                if (ShopValidate.checklenght(catalogName, 6, 30)) {
+                    boolean check = true;
+                    for (Catalog cat : catalogList) {
+                        if (cat.getCatalogName().equals(catalogName)) {
+                            check = false;
+                        }
+                    }
+                    if (check) {
+                        catalogNew.setCatalogName(catalogName);
+                        break;
+                    } else {
+                        System.err.println(ShopMessage.CATALOGMESSAGE_EXIST);
+                    }
+                } else {
+                    System.err.println(ShopMessage.CATALOGMESSAGE_LENGHT);
+                }
             } else {
                 System.err.println(ShopMessage.CATALOGMESSAGE_EMPTY);
             }
@@ -125,6 +125,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         } catch (NumberFormatException ex1) {
             System.err.println("Vui lòng nhập vào một số nguyên");
         }
+        System.out.println("0. Danh mục gốc");
         List<Catalog> catalogListonl = null;
         for (Catalog cat : catalogList) {
             if (cat.getCatalog() == null && cat.isCatalogStatus()) {
@@ -132,21 +133,24 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                 catalogListonl.add(cat);
             }
         }
-        System.out.println("0. Danh mục gốc");
         System.out.println("lựa chọn danh mục theo Id");
         do {
-            if (ShopValidate.checkInteger(sc.nextLine())){
+            if (ShopValidate.checkInteger(sc.nextLine())) {
                 int choice2 = Integer.parseInt(sc.nextLine());
-                for (Catalog cat : catalogListonl) {
-
-                    if (cat.getCatalogId()==choice2) {
-                        catalogNew.setCatalog(catalogList.get(choice2 - 1));
-                    } else {
-                        catalogNew.setCatalog(null);
+                if (choice2 == 0) {
+                    catalogNew.setCatalog(null);
+                    break;
+                } else {
+                    for (Catalog cat : catalogListonl) {
+                        if (cat.getCatalogId() == choice2) {
+                            catalogNew.setCatalog(catalogList.get(choice2 - 1));
+                            break;
+                        } else {
+                            System.err.println(ShopMessage.CATALOGMESSAGE_DISPLAY);
+                        }
                     }
                 }
             }
-
         } while (true);
         return catalogNew;
     }
@@ -157,7 +161,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         if (catalog.isCatalogStatus()) {
             status = "Hoạt động";
         }
-        System.out.printf("%-10d. %-30s - %-20s\n",catalog.getCatalogId(),catalog.getCatalogName(),status);
+        System.out.printf("%-10d. %-30s - %-20s\n", catalog.getCatalogId(), catalog.getCatalogName(), status);
     }
 
     @Override
