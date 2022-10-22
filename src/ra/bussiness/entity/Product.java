@@ -3,6 +3,7 @@ package ra.bussiness.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 public class Product implements Serializable {
     private String pruductId;
     private String productName;
@@ -11,16 +12,16 @@ public class Product implements Serializable {
     private float exportPrice;
     private String title;
     private String content;
-    private List<Color> colorList;
-    private List<Size> sizeList;
-    private List<Product> productList;
+    private List<Color> productColorList;
+    private List<Size> productSizeList;
+    private Catalog catalog;
     private boolean productStatus;
     private Date date;
 
     public Product() {
     }
 
-    public Product(String pruductId, String productName, float price, float discount, float exportPrice, String title, String content, List<Color> colorList, List<Size> sizeList, List<Product> productList, boolean productStatus, Date date) {
+    public Product(String pruductId, String productName, float price, float discount, float exportPrice, String title, String content, List<Color> productColorList, List<Size> productSizeList, Catalog catalog, boolean productStatus, Date date) {
         this.pruductId = pruductId;
         this.productName = productName;
         this.price = price;
@@ -28,9 +29,9 @@ public class Product implements Serializable {
         this.exportPrice = exportPrice;
         this.title = title;
         this.content = content;
-        this.colorList = colorList;
-        this.sizeList = sizeList;
-        this.productList = productList;
+        this.productColorList = productColorList;
+        this.productSizeList = productSizeList;
+        this.catalog = catalog;
         this.productStatus = productStatus;
         this.date = date;
     }
@@ -91,28 +92,28 @@ public class Product implements Serializable {
         this.content = content;
     }
 
-    public List<Color> getColorList() {
-        return colorList;
+    public List<Color> getProductColorList() {
+        return productColorList;
     }
 
-    public void setColorList(List<Color> colorList) {
-        this.colorList = colorList;
+    public void setProductColorList(List<Color> productColorList) {
+        this.productColorList = productColorList;
     }
 
-    public List<Size> getSizeList() {
-        return sizeList;
+    public List<Size> getProductSizeList() {
+        return productSizeList;
     }
 
-    public void setSizeList(List<Size> sizeList) {
-        this.sizeList = sizeList;
+    public void setProductSizeList(List<Size> productSizeList) {
+        this.productSizeList = productSizeList;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Catalog getCatalog() {
+        return this.catalog;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
     }
 
     public boolean isProductStatus() {
@@ -131,3 +132,4 @@ public class Product implements Serializable {
         this.date = date;
     }
 }
+

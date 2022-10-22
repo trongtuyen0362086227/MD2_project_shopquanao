@@ -162,6 +162,15 @@ public class UserImp implements IUser<User, Integer> {
             }
         } while (true);
         System.out.println("Nhập số điện thoại vào");
+        do {
+            String phoneNumber = sc.nextLine();
+            if (ShopValidate.checkPhoneFormat(phoneNumber)){
+                userNew.setUserPhoneNumber(phoneNumber);
+                break;
+            } else {
+                System.out.println("Đinh dạng số điện thoại sai vui lòng nhập lại");
+            }
+        } while (true);
 
         return userNew;
     }

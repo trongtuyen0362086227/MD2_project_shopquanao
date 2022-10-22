@@ -37,4 +37,9 @@ public class ShopValidate {
         Matcher matcher = pattern.matcher(str);
         return matcher.matches();
     }
+    public static boolean checkPhoneFormat(String str){
+        Pattern pattern = Pattern.compile(ShopConstanst.PHONE_REGEX);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
+    }
 }
