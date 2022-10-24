@@ -2,6 +2,7 @@ package ra.bussiness.imple;
 
 import ra.bussiness.design.Icatalog;
 import ra.bussiness.entity.Catalog;
+import ra.bussiness.entity.Product;
 import ra.config.ShopConstanst;
 import ra.config.ShopMessage;
 import ra.config.ShopValidate;
@@ -125,12 +126,18 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         } catch (NumberFormatException ex1) {
             System.err.println("Vui lòng nhập vào một số nguyên");
         }
+        ProductImp proImp = new ProductImp();
         System.out.println("0. Danh mục gốc");
         List<Catalog> catalogListonl = null;
         for (Catalog cat : catalogList) {
             if (cat.getCatalog() == null && cat.isCatalogStatus()) {
-                displayListCatalog(cat, catalogList, 0);
-                catalogListonl.add(cat);
+                for (Product pro:proImp.readFromfile()) {
+                    if (pro.getCatalog().getCatalogId()!=cat.getCatalogId()){
+                        displayListCatalogData(cat, catalogList, 0);
+                        catalogListonl.add(cat);
+                    }
+                }
+
             }
         }
         System.out.println("lựa chọn danh mục theo Id");
@@ -165,15 +172,24 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
     }
 
     @Override
-    public Catalog searchByname(Scanner sc) {
-        return null;
+    public boolean searchByID(int catalogId) {
+        List<Catalog> list = readFromfile();
+        boolean check = false;
+                    for (Catalog cat : list) {
+                        if (cat.getCatalogId() == catalogId) {
+                            check = true;
+                            break;
+                        }
+                    }
+        return check;
     }
 
-    public static void displayListCatalog(Catalog root, List<Catalog> list, int cnt) {
+    public void displayListCatalogData(Catalog root, List<Catalog> list, int cnt) {
         for (int i = 0; i < cnt; i++) {
             System.out.println("\t");
         }
-        System.out.printf("%d. %s\n", root.getCatalogId(), root.getCatalogName());
+        CatalogImp catalogImp = new CatalogImp();
+        catalogImp.displayData(root);
         List<Catalog> listchild = new ArrayList<>();
         for (Catalog cat : list) {
             if (cat.getCatalog() != null && cat.getCatalogId() == root.getCatalogId()) {
@@ -184,7 +200,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
             cnt++;
         }
         for (Catalog cat : listchild) {
-            displayListCatalog(cat, list, cnt);
+            displayListCatalogData(cat, list, cnt);
         }
     }
 }

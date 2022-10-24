@@ -2,7 +2,7 @@ package ra.bussiness.entity;
 
 import java.io.Serializable;
 
-public class Color implements Serializable {
+public class Color implements Serializable{
     private int colorId;
     private String colorName;
     private boolean colorStatus;

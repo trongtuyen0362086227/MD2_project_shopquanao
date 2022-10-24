@@ -1,7 +1,9 @@
 package ra.bussiness.design;
 
+import ra.bussiness.entity.Catalog;
+
 import java.util.Scanner;
 
 public interface Icatalog<T, E> extends IShop<T,E>{
-    T searchByname(Scanner sc);
+    boolean searchByID(int id);
 }

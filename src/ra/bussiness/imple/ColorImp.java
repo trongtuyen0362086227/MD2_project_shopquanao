@@ -1,6 +1,7 @@
 package ra.bussiness.imple;
 
 import ra.bussiness.design.IShop;
+import ra.bussiness.entity.Catalog;
 import ra.bussiness.entity.Color;
 import ra.config.ShopConstanst;
 import ra.config.ShopMessage;
@@ -139,6 +140,17 @@ public class ColorImp implements IShop<Color, Integer> {
             status = "Hoạt động";
         }
         System.out.printf("%-10d. %-30s - %-20s\n", color.getColorId(), color.getColorName(), status);
+    }
+    public boolean searchById(int colorId){
+        List<Color> list = readFromfile();
+        boolean check = false;
+        for (Color color : list) {
+            if (color.getColorId() == colorId) {
+                check = true;
+                break;
+            }
+        }
+        return check;
     }
 }
 

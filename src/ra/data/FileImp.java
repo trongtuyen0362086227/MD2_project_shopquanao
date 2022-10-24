@@ -11,10 +11,12 @@ public class FileImp<T> {
         List<T> list = null;
         try {
             file = new File(path);
-            fis = new FileInputStream(file);
-            ois = new ObjectInputStream(fis);
+            if (file.exists()){
+                fis = new FileInputStream(file);
+                ois = new ObjectInputStream(fis);
+                list = (List<T>) ois.readObject();
+            }
 
-            list = (List<T>) ois.readObject();
         } catch (Exception ex1){
             ex1.printStackTrace();
         } finally {

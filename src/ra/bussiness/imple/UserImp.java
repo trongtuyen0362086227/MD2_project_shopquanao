@@ -93,7 +93,7 @@ public class UserImp implements IUser<User, Integer> {
         do {
             String str = sc.nextLine();
             if (ShopValidate.checkempty(str)){
-                if (str.trim().length()>=6){
+                if (ShopValidate.checkUserNameFormat(str)){
                     boolean check = true;
                     for (User user : userList) {
                        if (user.getUserName().equals(str)){
@@ -107,7 +107,7 @@ public class UserImp implements IUser<User, Integer> {
                         System.err.println(ShopMessage.USERMESSAGE_EXIST);
                     }
                 } else {
-                    System.err.println(ShopMessage.USERMESSAGE_LENGHT);
+                    System.err.println("Tên mật khẩu gồm ít nhất 6 ký tự có ký tự viết thường viết hoa và số");
                 }
             } else {
                 System.err.println(ShopMessage.USERMESSAGE_EMPTY);
@@ -127,7 +127,18 @@ public class UserImp implements IUser<User, Integer> {
                 System.err.println(ShopMessage.USERPASSWORDMESSAGE_EMPTY);
             }
         } while (true);
+        System.out.println("Vui lòng nhập xác nhận mật khẩu vào");
+        do {
+            String confirmPassword = sc.nextLine();
+                    if (confirmPassword.equals(userNew.getPassword())){
+                        userNew.setConfirmPassword(confirmPassword);
+                        break;
+                    } else {
+                        System.err.println("Xác nhận mật khẩu sai vui lòng nhập lại");
+                    }
+        } while (true);
         System.out.println("Vui lòng nhập tên chủ tài khoản");
+
         userNew.setFullName(sc.nextLine());
         Date date = new Date();
         userNew.setDate(date);
@@ -221,6 +232,15 @@ public class UserImp implements IUser<User, Integer> {
 
     @Override
     public List<Product> searchProductbyDiscount(float min, float max) {
+        return null;
+    }
+    public User checkLogin(String userName, String password){
+        List<User> userList = readFromfile();
+        for (User user:userList) {
+            if (user.getUserName().equals(userName)&&user.getPassword().equals(password)){
+                return user;
+            }
+        }
         return null;
     }
 }

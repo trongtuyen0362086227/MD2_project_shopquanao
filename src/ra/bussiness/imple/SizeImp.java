@@ -1,6 +1,7 @@
 package ra.bussiness.imple;
 
 import ra.bussiness.design.IShop;
+import ra.bussiness.entity.Color;
 import ra.bussiness.entity.Size;
 import ra.config.ShopConstanst;
 import ra.config.ShopMessage;
@@ -138,5 +139,16 @@ public class SizeImp implements IShop<Size, Integer> {
             status = "Hoạt động";
         }
         System.out.printf("%-10d. %-30s - %-20s\n", size.getSizeId(),size.getSizeName(), status);
+    }
+    public boolean searchById(int sizeId){
+        List<Size> list = readFromfile();
+        boolean check = false;
+        for (Size size : list) {
+            if (size.getSizeId() == sizeId) {
+                check = true;
+                break;
+            }
+        }
+        return check;
     }
 }
