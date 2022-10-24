@@ -15,7 +15,7 @@ public class ColorMenu {
     private static ColorImp colorImp = new ColorImp();
 
 
-    public static void displayColorMenu(Scanner sc) {
+    public void displayColorMenu(Scanner sc) {
         boolean exit = true;
         do {
             System.out.println("**********QUẢN LÝ MÀU SẮC**********");

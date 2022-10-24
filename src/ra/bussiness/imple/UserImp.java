@@ -107,7 +107,7 @@ public class UserImp implements IUser<User, Integer> {
                         System.err.println(ShopMessage.USERMESSAGE_EXIST);
                     }
                 } else {
-                    System.err.println("Tên mật khẩu gồm ít nhất 6 ký tự có ký tự viết thường viết hoa và số");
+                    System.err.println("Tên đăng nhập gồm ít nhất 6 ký tự có ký tự viết thường viết hoa và số");
                 }
             } else {
                 System.err.println(ShopMessage.USERMESSAGE_EMPTY);

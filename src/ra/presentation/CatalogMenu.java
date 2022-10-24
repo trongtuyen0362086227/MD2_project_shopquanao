@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class CatalogMenu {
     private static CatalogImp catImp = new CatalogImp();
 
-    public static void displayCatalogMenu(Scanner sc) {
+    public void displayCatalogMenu(Scanner sc) {
         do {
             System.out.println("**********QUẢN LÝ DANH MỤC**********");
             System.out.println("1.Hiển thị danh sách danh mục theo cây danh mục");

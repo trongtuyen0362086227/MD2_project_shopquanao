@@ -12,7 +12,7 @@ import java.util.*;
 public class UserMenu {
     private static UserImp userImp = new UserImp();
 
-    public static void displayMenuUser(Scanner sc) {
+    public void displayMenuUser(Scanner sc) {
         boolean exit = true;
         do {
             System.out.println("**********QUẢN LÝ TÀI KHOẢN **********");

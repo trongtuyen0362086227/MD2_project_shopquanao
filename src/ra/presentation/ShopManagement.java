@@ -14,12 +14,10 @@ public class ShopManagement {
     private static ProductImp proImp = new ProductImp();
     private static ColorImp colorImp = new ColorImp();
     private static SizeImp sizeImp = new SizeImp();
+    private static AdminMenu adminMenu = new AdminMenu();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Date date = new Date();
-        User user = new User(1,"tuyen","tuyen","tuyen","trong tuyen",true,date,true,"tuyenxd","036");
-       System.out.println(userImp.create(user));
         do {
             System.out.println("****************TORANO SHOP***************");
             System.out.println("1. ĐĂNG NHẬP");
@@ -64,9 +62,11 @@ public class ShopManagement {
             User user = userImp.checkLogin(userNaame, password);
             if (user != null) {
                 if (user.isPermission()) {
-                    // admin
+                    adminMenu.displayAdminMenu(sc);
+                    break;
                 } else {
-                    // user
+                    UserDisplayMenu.displayUserMenu(sc);
+                    break;
                 }
             } else {
                 //dang nhap that bai
@@ -82,7 +82,7 @@ public class ShopManagement {
                             int choice = Integer.parseInt(str);
                             if (choice == 2) {
                                 register(sc);
-                                 break;
+                                break;
                             } else if (choice == 3) {
                                 break;
                             }
@@ -96,7 +96,16 @@ public class ShopManagement {
             }
         } while (true);
     }
-    public static void register(Scanner sc){
-        userImp.inputData(sc);
+
+    public static void register(Scanner sc) {
+        User user = userImp.inputData(sc);
+        boolean result = userImp.create(user);
+        if (result) {
+            System.out.println("Đăng kí thành công");
+            login(sc);
+        } else {
+            System.out.println("Đã xảy ra lỗi trong quá trình đăng kí.");
+            register(sc);
+        }
     }
 }

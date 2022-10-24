@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Product implements Serializable {
+public class Product implements Serializable,Comparable<Product> {
     private String pruductId;
     private String productName;
     private float price;
@@ -130,6 +130,11 @@ public class Product implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        return (int) (o.getDiscount() - this.getDiscount());
     }
 }
 

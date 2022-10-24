@@ -302,7 +302,7 @@ public class ProductImp implements IProduct<Product, Integer> {
         List<Catalog> listCatalogChild = new ArrayList<>();
         int cnt = 1;
         for (Catalog cat : catalogList) {
-            if (checkProductChild(cat, catalogList)) {
+            if (checkCatalogNotChild(cat, catalogList)) {
                 listCatalogChild.add(cat);
             }
         }
@@ -388,7 +388,7 @@ public class ProductImp implements IProduct<Product, Integer> {
         return exportPrice;
     }
 
-    public static boolean checkProductChild(Catalog child, List<Catalog> list) {
+    public static boolean checkCatalogNotChild(Catalog child, List<Catalog> list) {
         for (Catalog cat : list) {
             if (child.getCatalogId() == cat.getCatalog().getCatalogId()) {
                 return false;
@@ -411,4 +411,5 @@ public class ProductImp implements IProduct<Product, Integer> {
         }
         return str;
     }
+
 }

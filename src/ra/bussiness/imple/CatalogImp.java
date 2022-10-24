@@ -59,7 +59,11 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
     @Override
     public List<Catalog> readFromfile() {
         FileImp fileImp = new FileImp();
-        return fileImp.readFromFile(ShopConstanst.URL_CATALOG_FILE);
+        List<Catalog> catalogList = fileImp.readFromFile(ShopConstanst.URL_CATALOG_FILE);
+        if (catalogList==null){
+            catalogList = new ArrayList<>();
+        }
+        return catalogList;
     }
 
     @Override
@@ -74,7 +78,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
-        Catalog catalogNew = new Catalog();
+        Catalog catalogNew = new Catalog(1, "Quan Ao", true, null);
         if (catalogList.size() == 0) {
             catalogNew.setCatalogId(1);
         } else {
@@ -128,7 +132,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         }
         ProductImp proImp = new ProductImp();
         System.out.println("0. Danh mục gốc");
-        List<Catalog> catalogListonl = null;
+        List<Catalog> catalogListonl = new ArrayList<>();
         for (Catalog cat : catalogList) {
             if (cat.getCatalog() == null && cat.isCatalogStatus()) {
                 for (Product pro:proImp.readFromfile()) {
@@ -202,5 +206,17 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         for (Catalog cat : listchild) {
             displayListCatalogData(cat, list, cnt);
         }
+    }
+    public  List<Catalog> searchCatalogChildnotChild(Catalog root){
+        List<Catalog> catalogList = readFromfile();
+        List<Catalog> listChild = new ArrayList<>();
+        for (Catalog cat:catalogList) {
+            if (cat.getCatalog().getCatalogId()==root.getCatalogId()){
+                listChild.add(cat);
+                searchCatalogChildnotChild(cat);
+                listChild.add(cat);
+            }
+        }
+        return listChild;
     }
 }

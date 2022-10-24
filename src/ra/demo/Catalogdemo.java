@@ -1,24 +1,20 @@
-package ra.bussiness.entity;
+package ra.demo;
 
-import java.io.Serializable;
-
-public class Catalog implements Serializable {
+public class Catalogdemo {
     private int catalogId;
     private String catalogName;
-
-    private String content;
     private boolean catalogStatus;
-    private Catalog catalog;
 
-    public Catalog(int i, String quan_ao, boolean b, Object o) {
+    private Catalogdemo catalogdemo;
+
+    public Catalogdemo() {
     }
 
-    public Catalog(int catalogId, String catalogName, String content, boolean catalogStatus, Catalog catalog) {
+    public Catalogdemo(int catalogId, String catalogName, boolean catalogStatus, Catalogdemo catalogdemo) {
         this.catalogId = catalogId;
         this.catalogName = catalogName;
-        this.content = content;
         this.catalogStatus = catalogStatus;
-        this.catalog = catalog;
+        this.catalogdemo = catalogdemo;
     }
 
     public int getCatalogId() {
@@ -37,14 +33,6 @@ public class Catalog implements Serializable {
         this.catalogName = catalogName;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public boolean isCatalogStatus() {
         return catalogStatus;
     }
@@ -53,11 +41,11 @@ public class Catalog implements Serializable {
         this.catalogStatus = catalogStatus;
     }
 
-    public Catalog getCatalog() {
-        return catalog;
+    public Catalogdemo getCatalogdemo() {
+        return catalogdemo;
     }
 
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
+    public void setCatalogdemo(Catalogdemo catalogdemo) {
+        this.catalogdemo = catalogdemo;
     }
 }

@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class SizeMenu {
      private static SizeImp sizeImp = new SizeImp();
 
-    public static void displaySizeMenu(Scanner sc) {
+    public void displaySizeMenu(Scanner sc) {
         boolean exit = true;
         do {
             System.out.println("********** QUẢN LÝ KÍCH CỠ **********");
