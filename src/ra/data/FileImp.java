@@ -1,10 +1,12 @@
 package ra.data;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileImp<T> {
     public List<T> readFromFile(String path){
+        List<T> List = new ArrayList<>();
         File file = null;
         FileInputStream fis = null;
         ObjectInputStream ois = null;

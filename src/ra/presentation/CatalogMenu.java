@@ -7,6 +7,7 @@ import ra.bussiness.imple.ColorImp;
 import ra.config.ShopMessage;
 import ra.config.ShopValidate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,6 +15,7 @@ public class CatalogMenu {
     private static CatalogImp catImp = new CatalogImp();
 
     public void displayCatalogMenu(Scanner sc) {
+        boolean exit = true;
         do {
             System.out.println("**********QUẢN LÝ DANH MỤC**********");
             System.out.println("1.Hiển thị danh sách danh mục theo cây danh mục");
@@ -22,31 +24,13 @@ public class CatalogMenu {
             System.out.println("4. Xóa danh mục");
             System.out.println("5. Thoát");
             System.out.print("Lựa chọn của bạn: \n");
-            boolean exit = true;
+            int choice = 0;
             do {
                 String strChoice = sc.nextLine();
                 if (ShopValidate.checkempty(strChoice)) {
                     if (ShopValidate.checkInteger(strChoice)) {
-                        int choice = Integer.parseInt(strChoice);
-                        switch (choice) {
-                            case 1:
-                                CatalogMenu.displayListCatalog();
-                                break;
-                            case 2:
-                                CatalogMenu.inputDataListCatalog(sc);
-                                break;
-                            case 3:
-                                CatalogMenu.updateListCatalog(sc);
-                                break;
-                            case 4:
-                                CatalogMenu.deleteCataloginlist(sc);
-                                break;
-                            case 5:
-                                exit = false;
-                                break;
-                            default:
-                                System.err.println("Vui lòng chọn từ 1-5");
-                        }
+                        choice = Integer.parseInt(strChoice);
+                        break;
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
                     }
@@ -54,7 +38,26 @@ public class CatalogMenu {
                     System.err.println("Không được để trống, vui lòng nhập lại");
                 }
             } while (true);
-        } while (true);
+            switch (choice) {
+                case 1:
+                    CatalogMenu.displayListCatalog();
+                    break;
+                case 2:
+                    CatalogMenu.inputDataListCatalog(sc);
+                    break;
+                case 3:
+                    CatalogMenu.updateListCatalog(sc);
+                    break;
+                case 4:
+                    CatalogMenu.deleteCataloginlist(sc);
+                    break;
+                case 5:
+                    exit = false;
+                    break;
+                default:
+                    System.err.println("Vui lòng chọn từ 1-5");
+            }
+        } while (exit);
     }
 
     public static void displayListCatalog() {
@@ -68,19 +71,17 @@ public class CatalogMenu {
 
     public static void inputDataListCatalog(Scanner sc) {
         List<Catalog> catalogList = catImp.readFromfile();
+        if (catalogList==null){
+            catalogList = new ArrayList<>();
+        }
         System.out.println("Nhập số lượng danh mục cần thêm mới");
+        int number = 0;
         do {
             String strchoice = sc.nextLine();
             if (ShopValidate.checkempty(strchoice)) {
                 if (ShopValidate.checkInteger(strchoice)) {
-                    int number = Integer.parseInt(strchoice);
-                    for (int i = 0; i < number; i++) {
-                        System.out.println("Nhập thông tin cho danh mục thứ" + (i + 1));
-                        CatalogImp catalogImp = new CatalogImp();
-                        Catalog cat = catalogImp.inputData(sc);
-                        catalogList.add(cat);
-                        catalogImp.create(cat);
-                    }
+                     number = Integer.parseInt(strchoice);
+                    break;
                 } else {
                     System.err.println("Vui lòng nhập vào 1 số nguyên");
                 }
@@ -88,6 +89,13 @@ public class CatalogMenu {
                 System.err.println("Không được để trống vui lòng nhập dữ liệu");
             }
         } while (true);
+        for (int i = 0; i < number; i++) {
+            System.out.println("Nhập thông tin cho danh mục thứ" + (i + 1));
+            CatalogImp catalogImp = new CatalogImp();
+            Catalog cat = catalogImp.inputData(sc);
+            catalogList.add(cat);
+            catImp.writeToFile(catalogList);
+        }
     }
 
     public static void updateListCatalog(Scanner sc) {
@@ -138,30 +146,31 @@ public class CatalogMenu {
                             System.err.println("Vui lòng nhập vào một số nguyên");
                         }
                         System.out.println("0. Danh mục gốc");
-                        List<Catalog> catalogListonl = null;
+                        List<Catalog> catalogListonl = new ArrayList<>();
                         for (Catalog cat : list) {
-                            if (cat.getCatalog() == null && cat.isCatalogStatus()) {
+                            if (cat.getCatalog() == null) {
                                 catImp.displayListCatalogData(cat, list, 0);
-                                catalogListonl.add(cat);
                             }
                         }
                         System.out.println("lựa chọn danh mục theo Id");
+                        int choice2 = -1;
                         do {
+                            String strChoice2 = sc.nextLine();
+                            choice2 = Integer.parseInt(sc.nextLine());
                             if (ShopValidate.checkInteger(sc.nextLine())) {
-                                int choice2 = Integer.parseInt(sc.nextLine());
-                                if (choice2 == 0) {
-                                    list.get(catalogId).setCatalog(null);
-                                    break;
-                                } else {
-                                    for (Catalog cat : catalogListonl) {
-                                        if (cat.getCatalogId() == choice2) {
-                                            list.get(catalogId).setCatalog(list.get(choice2 - 1));
-                                            break;
-                                        } else {
-                                            System.err.println(ShopMessage.CATALOGMESSAGE_DISPLAY);
-                                        }
-                                    }
-                                }
+//                                if (choice2 == 0) {
+//                                    list.get(catalogId).setCatalog(null);
+//                                    break;
+//                                } else {
+//                                    for (Catalog cat : catalogListonl) {
+//                                        if (cat.getCatalogId() == choice2) {
+//                                            list.get(catalogId).setCatalog(list.get(choice2 - 1));
+//                                            break;
+//                                        } else {
+//                                            System.err.println(ShopMessage.CATALOGMESSAGE_DISPLAY);
+//                                        }
+//                                    }
+//                                }
                             }
                         } while (true);
                     }
@@ -176,18 +185,27 @@ public class CatalogMenu {
 
     public static void deleteCataloginlist(Scanner sc) {
         System.out.println("Nhập id danh mục bạn muốn xóa vào");
+        int catalogId  = 0;
         do {
-            String str = sc.nextLine();
+           String str = sc.nextLine();
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    catImp.delete(Integer.parseInt(str));
+                    catalogId = Integer.parseInt(str);
+                    break;
                 } else {
-                    System.err.println("Không được để trống");
+                    System.err.println("Vui lòng nhạp vào 1 số nguyên");
                 }
             } else {
-                System.err.println("Vui lòng nhạp vào 1 số nguyên");
+                System.err.println("Không được để trống");
             }
         } while (true);
+
+        boolean result =  catImp.delete(catalogId);
+        if (result){
+            System.out.println("Xóa thành công");
+        } else {
+            System.out.println("Đã xảy ra lỗi xóa thất bại");
+        }
     }
 }
 

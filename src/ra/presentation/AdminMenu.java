@@ -19,29 +19,14 @@ public class AdminMenu {
             System.out.println("3 - QUẢN LÝ MÀU SẮC");
             System.out.println("4 - QUẢN LÝ KÍCH CỠ");
             System.out.println("5 - QUẢN LÝ TÀI KHOẢN");
+            System.out.println("6 - THOÁT");
             System.out.println("Lựa chọn của bạn là");
+            int choice = 0;
             do {
                 String strChoice = sc.nextLine();
                 if (ShopValidate.checkempty(strChoice)) {
                     if (ShopValidate.checkInteger(strChoice)) {
-                        int choice = Integer.parseInt(strChoice);
-                        switch (choice) {
-                            case 1:
-                                catMenu.displayCatalogMenu(sc);
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                colorMenu.displayColorMenu(sc);
-                                break;
-                            case 4:
-                                sizeMenu.displaySizeMenu(sc);
-                                break;
-                            case 5:
-                                userMenu.displayMenuUser(sc);
-                                break;
-                            default:
-                        }
+                         choice = Integer.parseInt(strChoice);
                         break;
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
@@ -50,6 +35,27 @@ public class AdminMenu {
                     System.err.println("Không được để trống Vui lòng nhập lựa chọn");
                 }
             } while (true);
+            switch (choice) {
+                case 1:
+                    catMenu.displayCatalogMenu(sc);
+                    break;
+                case 2:
+                    ProductMenu.displayProductMenu(sc);
+                    break;
+                case 3:
+                    colorMenu.displayColorMenu(sc);
+                    break;
+                case 4:
+                    sizeMenu.displaySizeMenu(sc);
+                    break;
+                case 5:
+                    userMenu.displayMenuUser(sc);
+                    break;
+                case 6:
+                    checkExit = false;
+                    break;
+                default:
+            }
         } while (checkExit);
     }
 }

@@ -236,6 +236,9 @@ public class UserImp implements IUser<User, Integer> {
     }
     public User checkLogin(String userName, String password){
         List<User> userList = readFromfile();
+        if (userList==null){
+            userList = new ArrayList<>();
+        }
         for (User user:userList) {
             if (user.getUserName().equals(userName)&&user.getPassword().equals(password)){
                 return user;

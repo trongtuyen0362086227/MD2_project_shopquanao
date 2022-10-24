@@ -84,6 +84,8 @@ public class ShopManagement {
                                 register(sc);
                                 break;
                             } else if (choice == 3) {
+                                System.exit(0);
+                            } else {
                                 break;
                             }
                         } else {

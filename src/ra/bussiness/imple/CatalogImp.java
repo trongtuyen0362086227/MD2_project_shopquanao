@@ -8,6 +8,11 @@ import ra.config.ShopMessage;
 import ra.config.ShopValidate;
 import ra.data.FileImp;
 
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -41,6 +46,9 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
     @Override
     public boolean delete(Integer integer) {
         List<Catalog> catalogList = readFromfile();
+        if (catalogList == null) {
+            catalogList = new ArrayList<>();
+        }
         boolean returnData = false;
         for (int i = 0; i < catalogList.size(); i++) {
             if (catalogList.get(i).getCatalogId() == integer) {
@@ -58,12 +66,33 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
 
     @Override
     public List<Catalog> readFromfile() {
-        FileImp fileImp = new FileImp();
-        List<Catalog> catalogList = fileImp.readFromFile(ShopConstanst.URL_CATALOG_FILE);
-        if (catalogList==null){
-            catalogList = new ArrayList<>();
+        File file = null;
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        List<Catalog> list = null;
+        try {
+            file = new File(ShopConstanst.URL_CATALOG_FILE);
+            if (file.exists()) {
+                fis = new FileInputStream(file);
+                ois = new ObjectInputStream(fis);
+                list = (List<Catalog>) ois.readObject();
+            }
+
+        } catch (Exception ex1) {
+            ex1.printStackTrace();
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException ex2) {
+                ex2.printStackTrace();
+            }
         }
-        return catalogList;
+        return list;
     }
 
     @Override
@@ -74,11 +103,16 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
 
     @Override
     public Catalog inputData(Scanner sc) {
+        ProductImp proImp = new ProductImp();
+        List<Product> productList = proImp.readFromfile();
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
         List<Catalog> catalogList = readFromfile();
         if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
-        Catalog catalogNew = new Catalog(1, "Quan Ao", true, null);
+        Catalog catalogNew = new Catalog();
         if (catalogList.size() == 0) {
             catalogNew.setCatalogId(1);
         } else {
@@ -118,51 +152,65 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         System.out.println("1. Hoạt động");
         System.out.println("2. Không hoạt động");
         System.out.println("Lựa chọn của bạn là");
-        try {
-            int choice = Integer.parseInt(sc.nextLine());
-            if (choice == 1) {
-                catalogNew.setCatalogStatus(true);
-            } else if (choice == 2) {
-                catalogNew.setCatalogStatus(false);
-            } else {
-                System.err.println("Vui lòng chọn 1 hoặc 2");
-            }
-        } catch (NumberFormatException ex1) {
-            System.err.println("Vui lòng nhập vào một số nguyên");
-        }
-        ProductImp proImp = new ProductImp();
-        System.out.println("0. Danh mục gốc");
-        List<Catalog> catalogListonl = new ArrayList<>();
-        for (Catalog cat : catalogList) {
-            if (cat.getCatalog() == null && cat.isCatalogStatus()) {
-                for (Product pro:proImp.readFromfile()) {
-                    if (pro.getCatalog().getCatalogId()!=cat.getCatalogId()){
-                        displayListCatalogData(cat, catalogList, 0);
-                        catalogListonl.add(cat);
+        int choice = 0;
+        do {
+            String str = sc.nextLine();
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkInteger(str)) {
+                    choice = Integer.parseInt(str);
+                    if (choice == 1) {
+                        catalogNew.setCatalogStatus(true);
+                        break;
+                    } else if (choice == 2) {
+                        catalogNew.setCatalogStatus(false);
+                        break;
+                    } else {
+                        System.err.println("Vui lòng chọn 1 hoặc 2");
                     }
+                } else {
+                    System.err.println("Vui lỏng nhập vào 1 số nguyên");
                 }
-
+            } else {
+                System.err.println("Không được để trống vui lòng lựa chọn");
+            }
+        } while (true);
+        System.out.println("0. Danh mục gốc");
+        for (Catalog cat : catalogList) {
+            if (cat.getCatalog() == null) {
+                displayListCatalogData(cat, catalogList, 0);
             }
         }
         System.out.println("lựa chọn danh mục theo Id");
+        int catalogId = 0;
         do {
-            if (ShopValidate.checkInteger(sc.nextLine())) {
-                int choice2 = Integer.parseInt(sc.nextLine());
-                if (choice2 == 0) {
-                    catalogNew.setCatalog(null);
-                    break;
-                } else {
-                    for (Catalog cat : catalogListonl) {
-                        if (cat.getCatalogId() == choice2) {
-                            catalogNew.setCatalog(catalogList.get(choice2 - 1));
-                            break;
-                        } else {
-                            System.err.println(ShopMessage.CATALOGMESSAGE_DISPLAY);
+            String str = sc.nextLine();
+            catalogId = Integer.parseInt(str);
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkInteger(str)) {
+                    if (catalogId >= 0 && catalogId < catalogList.size()) {
+                        if (productList.get(catalogId).isProductStatus()) {
+                            boolean check = false;
+                            for (Product pro : productList) {
+                                if (pro.getCatalog().getCatalogId()!=catalogList.get(catalogId).getCatalogId()){
+                                    check = true;
+                                }
+                            } if (check){
+                                break;
+                            } else {
+                                System.err.println("Danh mục đã chứa sản phẩm");
+                            }
                         }
+                    } else {
+                        System.err.println("Không tìm thấy thư mục");
                     }
+                } else {
+                    System.err.println("Vui lòng nhap số nguyên vào");
                 }
+            } else {
+                System.err.println("Không được để trống");
             }
         } while (true);
+        catalogNew.setCatalog(catalogList.get(catalogId));
         return catalogNew;
     }
 
@@ -179,24 +227,28 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
     public boolean searchByID(int catalogId) {
         List<Catalog> list = readFromfile();
         boolean check = false;
-                    for (Catalog cat : list) {
-                        if (cat.getCatalogId() == catalogId) {
-                            check = true;
-                            break;
-                        }
-                    }
+        for (Catalog cat : list) {
+            if (cat.getCatalogId() == catalogId) {
+                check = true;
+                break;
+            }
+        }
         return check;
     }
 
     public void displayListCatalogData(Catalog root, List<Catalog> list, int cnt) {
         for (int i = 0; i < cnt; i++) {
-            System.out.println("\t");
+            System.out.print("\t");
         }
         CatalogImp catalogImp = new CatalogImp();
-        catalogImp.displayData(root);
+        String status = "Không hoạt động";
+        if (root.isCatalogStatus()) {
+            status = "Hoạt động";
+        }
+        System.out.printf("%d. %s - %s\n", root.getCatalogId(), root.getCatalogName(), status);
         List<Catalog> listchild = new ArrayList<>();
         for (Catalog cat : list) {
-            if (cat.getCatalog() != null && cat.getCatalogId() == root.getCatalogId()) {
+            if (cat.getCatalog() != null && cat.getCatalog().getCatalogId() == root.getCatalogId()) {
                 listchild.add(cat);
             }
         }
@@ -207,14 +259,17 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
             displayListCatalogData(cat, list, cnt);
         }
     }
-    public  List<Catalog> searchCatalogChildnotChild(Catalog root){
+
+    public List<Catalog> searchCatalogChild(Catalog root) {
         List<Catalog> catalogList = readFromfile();
+        if (catalogList.size() == 0) {
+            catalogList = new ArrayList<>();
+        }
         List<Catalog> listChild = new ArrayList<>();
-        for (Catalog cat:catalogList) {
-            if (cat.getCatalog().getCatalogId()==root.getCatalogId()){
+        for (Catalog cat : catalogList) {
+            if (cat.getCatalog().getCatalogId() == root.getCatalogId()) {
                 listChild.add(cat);
-                searchCatalogChildnotChild(cat);
-                listChild.add(cat);
+                searchCatalogChild(cat);
             }
         }
         return listChild;

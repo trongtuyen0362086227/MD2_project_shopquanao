@@ -25,31 +25,13 @@ public class ColorMenu {
             System.out.println("4. Xóa màu sắc");
             System.out.println("5. Thoát");
             System.out.print("Lựa chọn của bạn: \n");
-
+               int choice = 0;
             do {
                 String strChoice = sc.nextLine();
                 if (ShopValidate.checkempty(strChoice)) {
                     if (ShopValidate.checkInteger(strChoice)) {
-                        int choice = Integer.parseInt(strChoice);
-                        switch (choice) {
-                            case 1:
-                                ColorMenu.displayListColor();
-                                break;
-                            case 2:
-                                ColorMenu.inputListColor(sc);
-                                break;
-                            case 3:
-                                ColorMenu.updateListColor(sc);
-                                break;
-                            case 4:
-                                ColorMenu.deleteColor(sc);
-                                break;
-                            case 5:
-                                exit = false;
-                                break;
-                            default:
-                                System.err.println("Vui lòng chọn từ 1-5");
-                        }
+                        choice = Integer.parseInt(strChoice);
+                        break;
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
                     }
@@ -57,6 +39,25 @@ public class ColorMenu {
                     System.err.println("Không được để trống, vui lòng nhập lại");
                 }
             } while (true);
+            switch (choice) {
+                case 1:
+                    ColorMenu.displayListColor();
+                    break;
+                case 2:
+                    ColorMenu.inputListColor(sc);
+                    break;
+                case 3:
+                    ColorMenu.updateListColor(sc);
+                    break;
+                case 4:
+                    ColorMenu.deleteColor(sc);
+                    break;
+                case 5:
+                    exit = false;
+                    break;
+                default:
+                    System.err.println("Vui lòng chọn từ 1-5");
+            }
         } while (exit);
     }
 

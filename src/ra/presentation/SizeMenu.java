@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SizeMenu {
-     private static SizeImp sizeImp = new SizeImp();
+    private static SizeImp sizeImp = new SizeImp();
 
     public void displaySizeMenu(Scanner sc) {
         boolean exit = true;
@@ -25,31 +25,13 @@ public class SizeMenu {
             System.out.println("4. Xóa kích cỡ");
             System.out.println("5. Thoát");
             System.out.print("Lựa chọn của bạn: \n");
-
+            int choice = 0;
             do {
                 String strChoice = sc.nextLine();
                 if (ShopValidate.checkempty(strChoice)) {
                     if (ShopValidate.checkInteger(strChoice)) {
-                        int choice = Integer.parseInt(strChoice);
-                        switch (choice) {
-                            case 1:
-                                SizeMenu.displayListSize();
-                                break;
-                            case 2:
-                                SizeMenu.inputListSize(sc);
-                                break;
-                            case 3:
-                                SizeMenu.updateListSize(sc);
-                                break;
-                            case 4:
-                                SizeMenu.deleteSize(sc);
-                                break;
-                            case 5:
-                                exit = false;
-                                break;
-                            default:
-                                System.err.println("Vui lòng chọn từ 1-5");
-                        }
+                        choice = Integer.parseInt(strChoice);
+                        break;
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
                     }
@@ -57,6 +39,25 @@ public class SizeMenu {
                     System.err.println("Không được để trống, vui lòng nhập lại");
                 }
             } while (true);
+            switch (choice) {
+                case 1:
+                    SizeMenu.displayListSize();
+                    break;
+                case 2:
+                    SizeMenu.inputListSize(sc);
+                    break;
+                case 3:
+                    SizeMenu.updateListSize(sc);
+                    break;
+                case 4:
+                    SizeMenu.deleteSize(sc);
+                    break;
+                case 5:
+                    exit = false;
+                    break;
+                default:
+                    System.err.println("Vui lòng chọn từ 1-5");
+            }
         } while (exit);
     }
 

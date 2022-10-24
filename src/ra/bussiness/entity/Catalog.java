@@ -10,7 +10,7 @@ public class Catalog implements Serializable {
     private boolean catalogStatus;
     private Catalog catalog;
 
-    public Catalog(int i, String quan_ao, boolean b, Object o) {
+    public Catalog() {
     }
 
     public Catalog(int catalogId, String catalogName, String content, boolean catalogStatus, Catalog catalog) {
