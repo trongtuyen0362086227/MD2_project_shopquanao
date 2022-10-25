@@ -176,20 +176,23 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         } while (true);
         List<Catalog> listchild = new ArrayList<>();
         System.out.println("0. Danh mục gốc");
-        boolean check = false;
         for (Catalog cat : catalogList) {
-            if (cat.getCatalog() == null&&cat.isCatalogStatus()) {
-                for (Product pro: productList) {
-                    if (pro.getCatalog().getCatalogId()==cat.getCatalogId()){
-                       check = true;
+            if (cat.getCatalog() == null && cat.isCatalogStatus()) {
+                boolean check = true;
+                for (Product pro : productList) {
+                    if (pro.getCatalog().getCatalogId() == cat.getCatalogId()) {
+                        check = false;
                     }
                 }
-                if (!check) {
-                    listchild.add(cat);
-                    displayListCatalogData(cat, catalogList, 0);
+                if (check){
+                    CatalogImp catalogImp = new CatalogImp();
+                   catalogImp.displayListCatalogData(cat,catalogList,0);
                 }
             }
+
         }
+
+
         System.out.println("lựa chọn danh mục theo Id");
         int catalogId = 0;
         do {
@@ -197,10 +200,10 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
             catalogId = Integer.parseInt(str);
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    if (catalogId>=0&&catalogId<catalogList.size()&&!check){
+                    if (catalogId >= 0 && catalogId <= catalogList.size()) {
                         break;
                     } else {
-                        System.out.println("Vui lòng chọn các danh mục ở trên");
+                        System.err.println("Vui lòng chọn các danh mục ở trên");
                     }
                 } else {
                     System.err.println("Vui lòng nhập số nguyên vào");
@@ -209,10 +212,10 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                 System.err.println("Không được để trống");
             }
         } while (true);
-        if (catalogId == 0){
+        if (catalogId == 0) {
             catalogNew.setCatalog(null);
         } else {
-            catalogNew.setCatalog(listchild.get(catalogId));
+            catalogNew.setCatalog(listchild.get(catalogId - 1));
         }
         return catalogNew;
     }

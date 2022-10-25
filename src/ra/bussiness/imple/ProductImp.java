@@ -200,7 +200,7 @@ public class ProductImp implements IProduct<Product, Integer> {
                     System.err.println("Danh sác màu sắc không được để trống, vui lòng lựa chọn màu sắc");
                 }
             } while (true);
-            if (choice > 0 && choice < colorList.size()) {
+            if (choice > 0 && choice <= colorList.size()) {
                 boolean checkColorExist = false;
                 for (Color colorExist : product.getProductColorList()) {
                     if (colorExist.getColorId() == product.getProductColorList().get(choice - 1).getColorId()) {

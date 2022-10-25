@@ -103,6 +103,7 @@ public class ShopManagement {
         boolean result = userImp.create(user);
         if (result) {
             System.out.println("Đăng kí thành công");
+
             login(sc);
         } else {
             System.out.println("Đã xảy ra lỗi trong quá trình đăng kí.");
