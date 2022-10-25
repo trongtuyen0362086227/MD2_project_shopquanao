@@ -59,6 +59,12 @@ public class ProductImp implements IProduct<Product, Integer> {
 
     @Override
     public Product inputData(Scanner sc) {
+        Product product = new Product();
+        List<Size> sizeList1 = product.getProductSizeList();
+        if (sizeList1==null){
+            sizeList1 = new ArrayList<>();
+        }
+        List<Color> colorList1 = product.getProductColorList();
         List<Product> productList = readFromfile();
         if (productList == null) {
             productList = new ArrayList<>();
@@ -120,10 +126,11 @@ public class ProductImp implements IProduct<Product, Integer> {
         System.out.println("Nhập giá sản phẩm vào");
         do {
             String strPrice = sc.nextLine();
+            float price = Float.parseFloat(strPrice);
             if (ShopValidate.checkempty(strPrice)) {
                 if (ShopValidate.checkfloat(strPrice)) {
-                    if (Float.parseFloat(strPrice) > 0) {
-                        productNew.setPrice(Float.parseFloat(strPrice));
+                    if (price > 0) {
+                        productNew.setPrice(price);
                         break;
                     } else {
                         System.err.println("Vui lòng nhập giá sản phẩm lớn hơn 0");
@@ -181,7 +188,6 @@ public class ProductImp implements IProduct<Product, Integer> {
         } while (true);
         System.out.println("Vui lòng chọn các màu sắc của sản phẩm");
         do {
-            Product product = new Product();
             ColorImp colorImp = new ColorImp();
             List<Color> colorList = colorImp.readFromfile();
             if (colorList.size() == 0) {
@@ -206,14 +212,13 @@ public class ProductImp implements IProduct<Product, Integer> {
                 }
             } while (true);
             if (choice > 0 && choice <= colorList.size()) {
-                List<Color> colorList1 = product.getProductColorList();
+
                 if (colorList1==null){
                     colorList1 = new ArrayList<>();
-
                 }
                 boolean checkColorExist = false;
                 for (Color colorExist : colorList1) {
-                    if (colorExist.getColorId() == colorList1.get(choice - 1).getColorId()) {
+                    if (colorExist.getColorId() == colorList.get(choice - 1).getColorId()) {
                         checkColorExist = true;
                     }
                 }
@@ -249,7 +254,6 @@ public class ProductImp implements IProduct<Product, Integer> {
         } while (true);
         System.out.println("Chọn danh sách các kích cỡ");
         do {
-            Product product = new Product();
             SizeImp sizeImp = new SizeImp();
             List<Size> sizeList = sizeImp.readFromfile();
             if (sizeImp==null){
@@ -274,13 +278,10 @@ public class ProductImp implements IProduct<Product, Integer> {
                 }
             } while (true);
             if (choice3 > 0 && choice3 < sizeList.size()) {
-                List<Size> sizeList1 = product.getProductSizeList();
-                if (sizeList1==null){
-                    sizeList1 = new ArrayList<>();
-                }
+
                 boolean check = false;
                 for (Size sizeExist :sizeList1 ) {
-                    if (sizeExist.getSizeId() == sizeList1.get(choice3 - 1).getSizeId()) {
+                    if (sizeExist.getSizeId() == sizeList.get(choice3 - 1).getSizeId()) {
                         check = true;
                     }
                 }
@@ -316,24 +317,29 @@ public class ProductImp implements IProduct<Product, Integer> {
         } while (true);
         CatalogImp catalogImp = new CatalogImp();
         List<Catalog> catalogList = catalogImp.readFromfile();
+        if (catalogList==null){
+            catalogList = new ArrayList<>();
+        }
         List<Catalog> listCatalogChild = new ArrayList<>();
         int cnt = 1;
         for (Catalog cat : catalogList) {
             if (checkCatalogNotChild(cat, catalogList)) {
-                listCatalogChild.add(cat);
+              if (cat.isCatalogStatus()){
+                  listCatalogChild.add(cat);
+              }
             }
         }
         for (Catalog cat : listCatalogChild) {
-            System.out.printf("%d. %s", cnt, cat.getCatalogName());
+            System.out.printf("%d. %s \n", cnt, cat.getCatalogName());
             cnt++;
         }
         System.out.println("chọn danh mục sản phẩm");
         int choice5;
         do {
             String strchoice5 = sc.nextLine();
+            choice5 = Integer.parseInt(strchoice5);
             if (ShopValidate.checkempty(strchoice5)) {
                 if (ShopValidate.checkInteger(strchoice5)) {
-                    choice5 = Integer.parseInt(strchoice5);
                     if (choice5 > 0 && choice5 < listCatalogChild.size()) {
                         productNew.setCatalog(listCatalogChild.get(choice5 - 1));
                         break;
@@ -348,21 +354,31 @@ public class ProductImp implements IProduct<Product, Integer> {
             }
         } while (true);
         System.out.println("Nhập vào trạng thái sản phẩm");
-        System.out.println("1. đang bán");
-        System.out.println("2. Hết hàng");
+        System.out.println("1. Hoạt động");
+        System.out.println("2. Không hoạt động");
         System.out.println("Lựa chọn của bạn là");
-        try {
-            int choice = Integer.parseInt(sc.nextLine());
-            if (choice == 1) {
-                productNew.setProductStatus(true);
-            } else if (choice == 2) {
-                productNew.setProductStatus(false);
+        int choice = 0;
+        do {
+            String str = sc.nextLine();
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkInteger(str)) {
+                    choice = Integer.parseInt(str);
+                    if (choice == 1) {
+                        productNew.setProductStatus(true);
+                        break;
+                    } else if (choice == 2) {
+                        productNew.setProductStatus(false);
+                        break;
+                    } else {
+                        System.err.println("Vui lòng chọn 1 hoặc 2");
+                    }
+                } else {
+                    System.err.println("Vui lỏng nhập vào 1 số nguyên");
+                }
             } else {
-                System.err.println("Vui lòng chọn 1 hoặc 2");
+                System.err.println("Không được để trống vui lòng lựa chọn");
             }
-        } catch (NumberFormatException ex1) {
-            System.err.println("Vui lòng nhập vào một số nguyên");
-        }
+        } while (true);
         Date date = new Date();
         productNew.setDate(date);
         return productNew;
@@ -384,10 +400,13 @@ public class ProductImp implements IProduct<Product, Integer> {
     @Override
     public boolean deleteProduct(String str) {
         List<Product> productList = readFromfile();
+        if (productList==null){
+            productList = new ArrayList<>();
+        }
         boolean returnData = false;
         for (int i = 0; i < productList.size(); i++) {
             if (productList.get(i).getPruductId().equals(str)) {
-                productList.get(i).setProductStatus(!productList.get(i).isProductStatus());
+                productList.get(i).setProductStatus(false);
                 returnData = true;
                 break;
             }
@@ -406,13 +425,17 @@ public class ProductImp implements IProduct<Product, Integer> {
     }
 
     public static boolean checkCatalogNotChild(Catalog child, List<Catalog> list) {
+        boolean check = true;
         for (Catalog cat : list) {
-            if (child.getCatalogId() == cat.getCatalog().getCatalogId()) {
-                return false;
+            if (cat.getCatalog()!=null&&child.getCatalogId() == cat.getCatalog().getCatalogId()) {
+                check = false;
+                break;
             }
-            break;
+        } if (check){
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
     public static String displayListColor(Product pro){
         String str = "";
