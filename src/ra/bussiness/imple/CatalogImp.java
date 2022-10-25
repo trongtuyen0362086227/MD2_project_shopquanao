@@ -177,40 +177,44 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         List<Catalog> listchild = new ArrayList<>();
         System.out.println("0. Danh mục gốc");
         for (Catalog cat : catalogList) {
-            if (cat.getCatalog() == null && cat.isCatalogStatus()) {
+            if (cat.isCatalogStatus()) {
                 boolean check = true;
                 for (Product pro : productList) {
                     if (pro.getCatalog().getCatalogId() == cat.getCatalogId()) {
                         check = false;
                     }
                 }
-                if (check){
+                if (check) {
+                    listchild.add(cat);
                     CatalogImp catalogImp = new CatalogImp();
-                   catalogImp.displayListCatalogData(cat,catalogList,0);
+                    System.out.printf("%d. %s\n", cat.getCatalogId(), cat.getCatalogName());
                 }
             }
-
         }
-
-
         System.out.println("lựa chọn danh mục theo Id");
         int catalogId = 0;
         do {
-            String str = sc.nextLine();
-            catalogId = Integer.parseInt(str);
-            if (ShopValidate.checkempty(str)) {
-                if (ShopValidate.checkInteger(str)) {
-                    if (catalogId >= 0 && catalogId <= catalogList.size()) {
-                        break;
-                    } else {
-                        System.err.println("Vui lòng chọn các danh mục ở trên");
-                    }
-                } else {
-                    System.err.println("Vui lòng nhập số nguyên vào");
-                }
-            } else {
-                System.err.println("Không được để trống");
-            }
+           String str = sc.nextLine();
+           catalogId =Integer.parseInt(str);
+           if (ShopValidate.checkempty(str)){
+               if (ShopValidate.checkInteger(str)){
+                   boolean check = true;
+                   for (Catalog cat:listchild) {
+                       if (cat.getCatalogId()==catalogId){
+                           check = false;
+                       }
+                   }
+                   if (!check){
+                       break;
+                   } else {
+                       System.out.println("Vui lòng chọn các danh mục ở trên");
+                   }
+               }else {
+                   System.out.println("Vui lòng nhập vào 1 số nguyên");
+               }
+           } else {
+               System.out.println("Không được để trống");
+           }
         } while (true);
         if (catalogId == 0) {
             catalogNew.setCatalog(null);
