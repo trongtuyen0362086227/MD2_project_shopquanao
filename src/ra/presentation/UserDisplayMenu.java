@@ -10,6 +10,8 @@ import ra.config.ShopValidate;
 import java.util.*;
 
 public class UserDisplayMenu {
+    private static ProductImp proImp = new ProductImp();
+
     public static void displayUserMenu(Scanner sc) {
         boolean checkExist = true;
         do {
@@ -74,8 +76,9 @@ public class UserDisplayMenu {
                     System.err.println("Không được để trống vui lòng chọn 1-4");
                 }
             } while (true);
-            switch (choice){
+            switch (choice) {
                 case 1:
+                    ProductMenu.displayProductByCatalog();
                     break;
                 case 2:
                     UserDisplayMenu.displayProductByDate();
@@ -122,10 +125,13 @@ public class UserDisplayMenu {
                     UserDisplayMenu.searchPruductByName(sc);
                     break;
                 case 2:
+                    UserDisplayMenu.searchPruductByName(sc);
                     break;
                 case 3:
+                    UserDisplayMenu.searchPruductByPrice(sc);
                     break;
                 case 4:
+                    UserDisplayMenu.searchPruductDiscount(sc);
                     break;
                 case 5:
                     checkExistMenu2 = false;
@@ -198,7 +204,6 @@ public class UserDisplayMenu {
     }
 
     public static void searchPruductByCatalog(Scanner sc) {
-        ProductImp proImp = new ProductImp();
         List<Product> productList = proImp.readFromfile();
         CatalogImp catImp = new CatalogImp();
         List<Catalog> catalogList = catImp.readFromfile();
@@ -218,6 +223,97 @@ public class UserDisplayMenu {
             } else {
                 System.err.println("Không tìm thấy tên thư mục");
             }
+        }
+    }
+
+    public static void searchPruductByPrice(Scanner sc) {
+        List<Product> productList = proImp.readFromfile();
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
+        System.out.println("Nhập giá Thấp nhất bạn muốn tìm kiếm");
+        float minPrice = 0;
+        do {
+            String str = sc.nextLine();
+            minPrice = Float.parseFloat(str);
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkfloat(str)) {
+                    break;
+                } else {
+                    System.err.println("Vui lòng nhập 1 số thục vào");
+                }
+            } else {
+                System.err.println("Không được để trống vui lòng nhập dữ liệu vào");
+            }
+        } while (true);
+        System.out.println("Nhập giá cao nhât bạn muốn tìm kiếm");
+        float maxPrice = 0;
+        do {
+            String str = sc.nextLine();
+            maxPrice = Integer.parseInt(str);
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkfloat(str)) {
+                    break;
+                } else {
+                    System.err.println("Vui lòng nhập 1 số thục vào");
+                }
+            } else {
+                System.err.println("Không được để trống vui lòng nhập dữ liệu vào");
+            }
+        } while (true);
+        List<Product> listNew = new ArrayList<>();
+        for (Product pro:productList) {
+            if (pro.getExportPrice()<=minPrice&&pro.getExportPrice()<=maxPrice){
+                listNew.add(pro);
+            }
+        }
+        for (Product pro:listNew) {
+            proImp.displayData(pro);
+        }
+    }
+    public static void searchPruductDiscount(Scanner sc) {
+        List<Product> productList = proImp.readFromfile();
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
+        System.out.println("Nhập mã giảm giá Thấp nhất bạn muốn tìm kiếm");
+        float minDiscount = 0;
+        do {
+            String str = sc.nextLine();
+            minDiscount = Float.parseFloat(str);
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkfloat(str)) {
+                    break;
+                } else {
+                    System.err.println("Vui lòng nhập 1 số thực vào");
+                }
+            } else {
+                System.err.println("Không được để trống vui lòng nhập dữ liệu vào");
+            }
+        } while (true);
+        System.out.println("Nhập mã giảm giá cao nhất bạn muốn tìm kiếm");
+        float  maxDiscount = 0;
+        do {
+            String str = sc.nextLine();
+             maxDiscount = Integer.parseInt(str);
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkfloat(str)) {
+                    break;
+                } else {
+                    System.err.println("Vui lòng nhập 1 số thực vào");
+                }
+            } else {
+                System.err.println("Không được để trống vui lòng nhập dữ liệu vào");
+            }
+        } while (true);
+        List<Product> listNew = new ArrayList<>();
+        for (Product pro:productList) {
+            if (pro.getDiscount()<=minDiscount&&pro.getDiscount()<= maxDiscount){
+                listNew.add(pro);
+            }
+        }
+        for (Product pro:listNew) {
+            proImp.displayData(pro);
         }
     }
 }

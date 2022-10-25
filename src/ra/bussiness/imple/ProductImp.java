@@ -393,8 +393,8 @@ public class ProductImp implements IProduct<Product, Integer> {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         String strDate = formatter.format(product.getDate());
        System.out.printf("%-10s - %-20s - %-10f - %-10f - %-30s\n",product.getPruductId(),product.getProductName(),product.getPrice(),product.getExportPrice(),product.getTitle());
-       System.out.printf("%-20s - %-30s - %-30s\n",product.getContent(),displayListColor(product),displayListSize(product));
-       System.out.printf("%-15s - %-15s - %-15s\n",product.getCatalog(),strDate,status);
+//       System.out.printf("%-20s - %-30s - %-30s\n",product.getContent(),displayListColor(product),displayListSize(product));
+//       System.out.printf("%-15s - %-15s - %-15s\n",product.getCatalog(),strDate,status);
     }
 
     @Override

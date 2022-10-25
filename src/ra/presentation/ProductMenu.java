@@ -46,6 +46,7 @@ public class ProductMenu {
             } while (true);
             switch (choice) {
                 case 1:
+                    ProductMenu.displayProductByCatalog();
                     break;
                 case 2:
                     ProductMenu.inputListProduct(sc);
@@ -437,6 +438,49 @@ public class ProductMenu {
 
     }
 
-    public static void displayListProduct() {
+    public static void displayListCatalogAndProduct(Catalog root, List<Catalog> list, int cnt) {
+        ProductImp proImp = new ProductImp();
+        List<Product> productList = proImp.readFromfile();
+        if (productList==null){
+            productList = new ArrayList<>();
+        }
+        for (int i = 0; i < cnt; i++) {
+            System.out.print("\t");
+        }
+        CatalogImp catalogImp = new CatalogImp();
+        String status = "Không hoạt động";
+        if (root.isCatalogStatus()) {
+            status = "Hoạt động";
+        }
+        System.out.printf("%d. %s - %s\n", root.getCatalogId(), root.getCatalogName(), status);
+        List<Catalog> listchild = new ArrayList<>();
+        for (Catalog cat : list) {
+            if (cat.getCatalog() != null && cat.getCatalog().getCatalogId() == root.getCatalogId()) {
+                listchild.add(cat);
+            }
+        }
+        if (listchild.size() != 0) {
+            cnt++;
+        }
+        for (Catalog cat : listchild) {
+            displayListCatalogAndProduct(cat, list, cnt);
+            for (Product pro:productList) {
+                if (pro.getCatalog().getCatalogId()==cat.getCatalogId()&&ProductImp.checkCatalogNotChild(cat,list)){
+                    proImp.displayData(pro);
+                }
+            }
+        }
+    }
+    public static void displayProductByCatalog(){
+        CatalogImp catImp = new CatalogImp();
+        List<Catalog> catalogList = catImp.readFromfile();
+        if (catalogList == null){
+            catalogList = new ArrayList<>();
+        }
+        for (Catalog cat:catalogList) {
+            if (cat.getCatalog()==null){
+                displayListCatalogAndProduct(cat,catalogList,0);
+            }
+        }
     }
 }

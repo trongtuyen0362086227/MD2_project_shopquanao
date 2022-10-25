@@ -70,6 +70,12 @@ public class CatalogMenu {
         if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
+        ProductImp proImp = new ProductImp();
+        List<Product> productList = proImp.readFromfile();
+        if (productList == null){
+            productList = new ArrayList<>();
+        }
+
         for (Catalog cat : catalogList) {
             if (cat.getCatalog() == null) {
                 catImp.displayListCatalogData(cat, catalogList, 0);
