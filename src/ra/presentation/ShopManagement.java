@@ -69,7 +69,6 @@ public class ShopManagement {
                     break;
                 }
             } else {
-                //dang nhap that bai
                 System.err.println("Tài khoản hoặc mật khẩu bị sai");
                 System.out.println("1. Đăng nhập lại");
                 System.out.println("2. Đăng ký tài khoản mới");

@@ -174,10 +174,20 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                 System.err.println("Không được để trống vui lòng lựa chọn");
             }
         } while (true);
+        List<Catalog> listchild = new ArrayList<>();
         System.out.println("0. Danh mục gốc");
+        boolean check = false;
         for (Catalog cat : catalogList) {
-            if (cat.getCatalog() == null) {
-                displayListCatalogData(cat, catalogList, 0);
+            if (cat.getCatalog() == null&&cat.isCatalogStatus()) {
+                for (Product pro: productList) {
+                    if (pro.getCatalog().getCatalogId()==cat.getCatalogId()){
+                       check = true;
+                    }
+                }
+                if (!check) {
+                    listchild.add(cat);
+                    displayListCatalogData(cat, catalogList, 0);
+                }
             }
         }
         System.out.println("lựa chọn danh mục theo Id");
@@ -187,30 +197,23 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
             catalogId = Integer.parseInt(str);
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    if (catalogId >= 0 && catalogId < catalogList.size()) {
-                        if (productList.get(catalogId).isProductStatus()) {
-                            boolean check = false;
-                            for (Product pro : productList) {
-                                if (pro.getCatalog().getCatalogId()!=catalogList.get(catalogId).getCatalogId()){
-                                    check = true;
-                                }
-                            } if (check){
-                                break;
-                            } else {
-                                System.err.println("Danh mục đã chứa sản phẩm");
-                            }
-                        }
+                    if (catalogId>=0&&catalogId<catalogList.size()&&!check){
+                        break;
                     } else {
-                        System.err.println("Không tìm thấy thư mục");
+                        System.out.println("Vui lòng chọn các danh mục ở trên");
                     }
                 } else {
-                    System.err.println("Vui lòng nhap số nguyên vào");
+                    System.err.println("Vui lòng nhập số nguyên vào");
                 }
             } else {
                 System.err.println("Không được để trống");
             }
         } while (true);
-        catalogNew.setCatalog(catalogList.get(catalogId));
+        if (catalogId == 0){
+            catalogNew.setCatalog(null);
+        } else {
+            catalogNew.setCatalog(listchild.get(catalogId));
+        }
         return catalogNew;
     }
 
@@ -220,7 +223,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         if (catalog.isCatalogStatus()) {
             status = "Hoạt động";
         }
-        System.out.printf("%-10d. %-30s - %-20s\n", catalog.getCatalogId(), catalog.getCatalogName(), status);
+        System.out.printf("%-10d %-30s  %-20s\n", catalog.getCatalogId(), catalog.getCatalogName(), status);
     }
 
     @Override
