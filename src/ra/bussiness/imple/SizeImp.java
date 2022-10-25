@@ -44,7 +44,8 @@ public class SizeImp implements IShop<Size, Integer> {
         boolean returnData = false;
         for (int i = 0; i < sizeList.size(); i++) {
             if (sizeList.get(i).getSizeId() == integer) {
-                sizeList.get(i).setSizeStatus(!sizeList.get(i).isSizeStatus());
+                sizeList.get(i).setSizeStatus(false);
+
                 returnData = true;
                 break;
             }
@@ -110,23 +111,30 @@ public class SizeImp implements IShop<Size, Integer> {
                 System.err.println(ShopMessage.SIZEMESSAGE_EMPTY);
             }
         } while (true);
-        System.out.println("Nhập trạng thái kích cỡ");
-        System.out.println("1. Hoạt động ");
+        System.out.println("Nhập vào trạng thái kích cỡ");
+        System.out.println("1. Hoạt động");
         System.out.println("2. Không hoạt động");
         System.out.println("Lựa chọn của bạn là");
+        int choice = 0;
         do {
-            if (ShopValidate.checkInteger(sc.nextLine())){
-                int choice = Integer.parseInt(sc.nextLine());
-                if (choice==1){
-                    sizenew.setSizeStatus(true);
-                } else if (choice==2){
-                    sizenew.setSizeStatus(false);
+            String str = sc.nextLine();
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkInteger(str)) {
+                    choice = Integer.parseInt(str);
+                    if (choice == 1) {
+                         sizenew.setSizeStatus(true);
+                        break;
+                    } else if (choice == 2) {
+                        sizenew.setSizeStatus(false);
+                        break;
+                    } else {
+                        System.err.println("Vui lòng chọn 1 hoặc 2");
+                    }
                 } else {
-                    System.err.println("Vui lòng chọn 1 hoặc 2");
+                    System.err.println("Vui lỏng nhập vào 1 số nguyên");
                 }
-                break;
             } else {
-                System.err.println("Vui lòng nhập vào một số nguyên");
+                System.err.println("Không được để trống vui lòng lựa chọn");
             }
         } while (true);
         return sizenew;
@@ -138,7 +146,7 @@ public class SizeImp implements IShop<Size, Integer> {
         if (size.isSizeStatus()) {
             status = "Hoạt động";
         }
-        System.out.printf("%-10d. %-30s - %-20s\n", size.getSizeId(),size.getSizeName(), status);
+        System.out.printf("%-20d %-30s %-30s\n", size.getSizeId(),size.getSizeName(), status);
     }
     public boolean searchById(int sizeId){
         List<Size> list = readFromfile();

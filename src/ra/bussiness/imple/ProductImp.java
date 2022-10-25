@@ -69,18 +69,23 @@ public class ProductImp implements IProduct<Product, Integer> {
             String productId = sc.nextLine();
             if (ShopValidate.checkempty(productId)) {
                 if (ShopValidate.checklenght(productId, 5, 5)) {
-                    boolean checkexist = true;
-                    for (Product pro : productList) {
-                        if (pro.getPruductId().equals(productId)) {
-                            checkexist = false;
+                    if (productId.startsWith("P")){
+                        boolean checkexist = true;
+                        for (Product pro : productList) {
+                            if (pro.getPruductId().equals(productId)) {
+                                checkexist = false;
+                            }
                         }
-                    }
-                    if (checkexist) {
-                        productNew.setPruductId(productId);
-                        break;
+                        if (checkexist) {
+                            productNew.setPruductId(productId);
+                            break;
+                        } else {
+                            System.err.println(ShopMessage.PRODUCTID_MESSAGE_EXIST);
+                        }
                     } else {
-                        System.err.println(ShopMessage.PRODUCTID_MESSAGE_EXIST);
+                        System.err.println("Mã danh mục phải bắt đầu bằng ký tự P");
                     }
+
                 } else {
                     System.err.println(ShopMessage.PRODUCTID_MESSAGE_LENGHT);
                 }
@@ -186,12 +191,12 @@ public class ProductImp implements IProduct<Product, Integer> {
                 System.out.printf("%d. %s\n", color.getColorId(), color.getColorName());
             }
             System.out.println("chọn màu sắc");
-            int choice;
+            int choice = 0;
             do {
                 String strchoice = sc.nextLine();
+                choice = Integer.parseInt(strchoice);
                 if (ShopValidate.checkempty(strchoice)) {
                     if (ShopValidate.checkInteger(strchoice)) {
-                        choice = Integer.parseInt(strchoice);
                         break;
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
@@ -201,14 +206,19 @@ public class ProductImp implements IProduct<Product, Integer> {
                 }
             } while (true);
             if (choice > 0 && choice <= colorList.size()) {
+                List<Color> colorList1 = product.getProductColorList();
+                if (colorList1==null){
+                    colorList1 = new ArrayList<>();
+
+                }
                 boolean checkColorExist = false;
-                for (Color colorExist : product.getProductColorList()) {
-                    if (colorExist.getColorId() == product.getProductColorList().get(choice - 1).getColorId()) {
+                for (Color colorExist : colorList1) {
+                    if (colorExist.getColorId() == colorList1.get(choice - 1).getColorId()) {
                         checkColorExist = true;
                     }
                 }
                 if (!checkColorExist) {
-                    productNew.getProductColorList().add(colorList.get(choice - 1));
+                    colorList1.add(colorList.get(choice - 1));
                 } else {
                     System.err.println("Màu sắc đã tồn tại trọng danh sách màu sắc");
                 }
@@ -216,12 +226,12 @@ public class ProductImp implements IProduct<Product, Integer> {
                 System.out.println("1. Có");
                 System.out.println("2. Không");
                 System.out.print("Lựa chọn của bạn là: ");
-                int choice2;
+                int choice2 = 0;
                 do {
                     String strchoice2 = sc.nextLine();
+                    choice2 = Integer.parseInt(strchoice2);
                     if (ShopValidate.checkempty(strchoice2)) {
                         if (ShopValidate.checkInteger(strchoice2)) {
-                            choice2 = Integer.parseInt(strchoice2);
                             break;
                         } else {
                             System.err.println("Vui lòng nhập vào 1 số nguyên");
@@ -242,6 +252,9 @@ public class ProductImp implements IProduct<Product, Integer> {
             Product product = new Product();
             SizeImp sizeImp = new SizeImp();
             List<Size> sizeList = sizeImp.readFromfile();
+            if (sizeImp==null){
+                sizeList = new ArrayList<>();
+            }
             for (Size size : sizeList) {
                 System.out.printf("%d. %s\n", size.getSizeId(), size.getSizeName());
             }
@@ -260,15 +273,19 @@ public class ProductImp implements IProduct<Product, Integer> {
                     System.err.println("Không được để trống");
                 }
             } while (true);
-            if (choice3 < 0 && choice3 < sizeList.size()) {
+            if (choice3 > 0 && choice3 < sizeList.size()) {
+                List<Size> sizeList1 = product.getProductSizeList();
+                if (sizeList1==null){
+                    sizeList1 = new ArrayList<>();
+                }
                 boolean check = false;
-                for (Size sizeExist : product.getProductSizeList()) {
-                    if (sizeExist.getSizeId() == product.getProductSizeList().get(choice3 - 1).getSizeId()) {
+                for (Size sizeExist :sizeList1 ) {
+                    if (sizeExist.getSizeId() == sizeList1.get(choice3 - 1).getSizeId()) {
                         check = true;
                     }
                 }
                 if (!check) {
-                    product.getProductSizeList().add(sizeList.get(choice3 - 1));
+                    sizeList1.add(sizeList.get(choice3 - 1));
                 } else {
                     System.err.println("Kich cỡ đã tồn tại");
                 }

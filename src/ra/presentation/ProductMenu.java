@@ -78,7 +78,7 @@ public class ProductMenu {
             ProductImp proImp = new ProductImp();
             Product pro = proImp.inputData(sc);
             productList.add(pro);
-            proImp.create(pro);
+            proImp.writeToFile(productList);
         }
     }
     public static void updateListProduct(Scanner sc){

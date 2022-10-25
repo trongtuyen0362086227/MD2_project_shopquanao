@@ -7,10 +7,7 @@ import ra.bussiness.imple.SizeImp;
 import ra.config.ShopMessage;
 import ra.config.ShopValidate;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class SizeMenu {
     private static SizeImp sizeImp = new SizeImp();
@@ -63,12 +60,16 @@ public class SizeMenu {
 
     public static void displayListSize() {
         List<Size> sizeList = sizeImp.readFromfile();
+        if (sizeList==null){
+            sizeList = new ArrayList<>();
+        }
         Collections.sort(sizeList, new Comparator<Size>() {
             @Override
             public int compare(Size o1, Size o2) {
                 return o1.getSizeName().compareTo(o2.getSizeName());
             }
         });
+        System.out.printf("%-20s %-30s %-30s\n", "Mã kich cỡ","Tên kích cỡ","Trạng thái");
         for (Size size : sizeList) {
             sizeImp.displayData(size);
         }
@@ -76,19 +77,17 @@ public class SizeMenu {
 
     public static void inputListSize(Scanner sc) {
         List<Size> sizeList = sizeImp.readFromfile();
+        if (sizeList==null){
+            sizeList = new ArrayList<>();
+        }
         System.out.println("Nhập số lượng kích cỡ muốn thêm vào");
+        int number = 0;
         do {
             String str = sc.nextLine();
+            number = Integer.parseInt(str);
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    int num = Integer.parseInt(str);
-                    for (int i = 0; i < num; i++) {
-                        System.out.println("Nhập dữ liệu cho kích cỡ: " + (i + 1));
-                        SizeImp sizeImp1 = new SizeImp();
-                        Size size = sizeImp1.inputData(sc);
-                        sizeList.add(size);
-                        sizeImp1.create(size);
-                    }
+                    break;
                 } else {
                     System.err.println("Vui lòng nhập vào 1 số nguyên");
                 }
@@ -96,78 +95,125 @@ public class SizeMenu {
                 System.err.println("Không được để trống vui lòng nhập 1 số nguyên vào");
             }
         } while (true);
+        for (int i = 0; i < number; i++) {
+            System.out.println("Nhập dữ liệu cho kích cỡ: " + (i + 1));
+            SizeImp sizeImp1 = new SizeImp();
+            Size size = sizeImp1.inputData(sc);
+           sizeList.add(size);
+            sizeImp1.writeToFile(sizeList);
+        }
     }
 
     public static void updateListSize(Scanner sc) {
-        List<Size> list = sizeImp.readFromfile();
+        List<Size> sizeList = sizeImp.readFromfile();
+        if (sizeList == null) {
+            sizeList = new ArrayList<>();
+        }
         System.out.println("Nhập ID kích cỡ cần cập nhật vào");
+        int sizeId = 0;
         do {
             String str = sc.nextLine();
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    int sizeId = Integer.parseInt(str);
-                    if (sizeImp.searchById(sizeId)) {
-                        System.out.println("Nhập vào tên kích cỡ muốn cập nhật");
-                        do {
-                            String sizeName = sc.nextLine();
-                            if (ShopValidate.checkempty(sizeName)) {
-                                if (ShopValidate.checklenght(sizeName, 1, 10)) {
-                                    boolean check = true;
-                                    for (Size size : list) {
-                                        if (size.getSizeName().equals(sizeName)) {
-                                            check = false;
-                                        }
-                                    }
-                                    if (check) {
-                                        list.get(sizeId).setSizeName(sizeName);
-                                        break;
-                                    } else {
-                                        System.err.println(ShopMessage.SIZEMESSAGE_EXIST);
-                                    }
-                                } else {
-                                    System.err.println(ShopMessage.SIZEMESSAGE_LENGHT);
-                                }
-                            } else {
-                                break;
-                            }
-                        } while (true);
-                        System.out.println("Bạn có muốn cập nhật trạng thái kích cỡ");
-                        System.out.println("1. Có");
-                        System.out.println("2. Không ");
-                        System.out.println("Lựa chọn của bạn là");
-                        try {
-                            int choice = Integer.parseInt(sc.nextLine());
-                            if (choice == 1) {
-                                list.get(sizeId).setSizeStatus(!list.get(sizeId).isSizeStatus());
-                            } else {
-                                break;
-                            }
-                        } catch (NumberFormatException ex1) {
-                            System.err.println("Vui lòng nhập vào một số nguyên");
-                        }
-                    }
+                    sizeId = Integer.parseInt(str);
+                    break;
                 } else {
                     System.out.println("Vui lòng nhập vào 1 số nguyên");
                 }
             } else {
-                System.out.println("Không được để trống vui lòng nhập ID vào");
+                System.out.println("Không được để trống nhập ID vào");
             }
         } while (true);
+        boolean check = true;
+        for (Size size : sizeList) {
+            if (size.getSizeId() == sizeId) {
+                check = false;
+                break;
+            }
+        }
+        if (check) {
+            System.out.println("Không tìm thấy kích cỡ");
+        } else {
+            System.out.println("Nhập vào tên kích muốn cập nhật");
+            do {
+                String sizeName = sc.nextLine();
+                if (ShopValidate.checkempty(sizeName)) {
+                    if (ShopValidate.checklenght(sizeName, 4, 30)) {
+                        boolean checkExist = true;
+                        for (Size size : sizeList) {
+                            if (size.getSizeName().equals(sizeName)) {
+                                checkExist = false;
+                            }
+                        }
+                        if (checkExist) {
+                            sizeList.get(sizeId - 1).setSizeName(sizeName);
+                            break;
+                        } else {
+                            System.err.println(ShopMessage.SIZEMESSAGE_EXIST);
+                        }
+                    } else {
+                        System.err.println(ShopMessage.SIZEMESSAGE_LENGHT);
+                    }
+                } else {
+                    break;
+                }
+            } while (true);
+            System.out.println("Bạn có muốn cập nhật trang thái không");
+            System.out.println("1. Có");
+            System.out.println("2. Không");
+            System.out.println("Lựa chọn của bạn là");
+            int choice = 0;
+            do {
+                String srt = sc.nextLine();
+                if (ShopValidate.checkempty(srt)){
+                    if (ShopValidate.checkInteger(srt)){
+                        choice = Integer.parseInt(srt);
+                        break;
+                    } else {
+                        System.err.println("Vui lòng nhập vào 1 số nguyên");
+                    }
+                } else {
+                    System.err.println("Không được để trống vui lòng nhập dữ liệu vào");
+                }
+            } while (true);
+            if (choice ==1){
+                sizeList.get(sizeId-1).setSizeStatus(!sizeList.get(sizeId-1).isSizeStatus());
+            }
+            boolean result =  sizeImp.writeToFile(sizeList);
+            if (result){
+                System.out.println("Cập nhật thành công");
+            } else {
+                System.out.println("Cập nhật thất bại");
+            }
+        }
     }
 
     public static void deleteSize(Scanner sc) {
+        List<Size> sizeList = sizeImp.readFromfile();
+        if (sizeList == null) {
+            sizeList = new ArrayList<>();
+        }
         System.out.println("Nhập id kích cỡ bạn muốn xóa vào");
+        int sizeId = 0;
         do {
             String str = sc.nextLine();
+            sizeId = Integer.parseInt(str);
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    sizeImp.delete(Integer.parseInt(str));
+                    break;
                 } else {
                     System.err.println("Không được để trống");
                 }
             } else {
-                System.err.println("Vui lòng nhạp vào 1 số nguyên");
+                System.err.println("Vui lòng nhập vào 1 số nguyên");
             }
         } while (true);
+        boolean result = sizeImp.delete(sizeId);
+        if (result) {
+            System.out.println("Xóa kích cỡ thành công");
+        } else {
+            System.out.println("Xóa kích cỡ thất bại");
+        }
+
     }
 }

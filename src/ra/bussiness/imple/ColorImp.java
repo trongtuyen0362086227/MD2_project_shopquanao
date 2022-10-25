@@ -45,7 +45,7 @@ public class ColorImp implements IShop<Color, Integer> {
         boolean returnData = false;
         for (int i = 0; i < colorList.size(); i++) {
             if (colorList.get(i).getColorId() == integer) {
-                colorList.get(i).setColorStatus(!colorList.get(i).isColorStatus());
+                colorList.get(i).setColorStatus(false);
                 returnData = true;
                 break;
             }
@@ -91,7 +91,7 @@ public class ColorImp implements IShop<Color, Integer> {
         do {
             String colorName = sc.nextLine();
             if (ShopValidate.checkempty(colorName)){
-                if (ShopValidate.checklenght(colorName,4,30)){
+                if (ShopValidate.checklenght(colorName,1,10)){
                      boolean check = true;
                     for (Color col:colorList) {
                         if (col.getColorName().equals(colorName)){
@@ -111,23 +111,30 @@ public class ColorImp implements IShop<Color, Integer> {
                 System.err.println(ShopMessage.COLORMESSAGE_EMPTY);
             }
         } while (true);
-        System.out.println("Nhập trạng thái màu sắc");
-        System.out.println("1. Hoạt động ");
+        System.out.println("Nhập vào trạng thái màu sắc");
+        System.out.println("1. Hoạt động");
         System.out.println("2. Không hoạt động");
         System.out.println("Lựa chọn của bạn là");
+        int choice = 0;
         do {
-            if (ShopValidate.checkInteger(sc.nextLine())){
-                int choice = Integer.parseInt(sc.nextLine());
-                if (choice==1){
-                    colornew.setColorStatus(true);
-                } else if (choice==2){
-                    colornew.setColorStatus(false);
+            String str = sc.nextLine();
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkInteger(str)) {
+                    choice = Integer.parseInt(str);
+                    if (choice == 1) {
+                        colornew.setColorStatus(true);
+                        break;
+                    } else if (choice == 2) {
+                        colornew.setColorStatus(false);
+                        break;
+                    } else {
+                        System.err.println("Vui lòng chọn 1 hoặc 2");
+                    }
                 } else {
-                    System.err.println("Vui lòng chọn 1 hoặc 2");
+                    System.err.println("Vui lỏng nhập vào 1 số nguyên");
                 }
-                break;
             } else {
-                System.err.println("Vui lòng nhập vào một số nguyên");
+                System.err.println("Không được để trống vui lòng lựa chọn");
             }
         } while (true);
         return colornew;

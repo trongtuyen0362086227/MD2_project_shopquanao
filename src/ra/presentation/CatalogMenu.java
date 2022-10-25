@@ -67,7 +67,7 @@ public class CatalogMenu {
 
     public static void displayListCatalog() {
         List<Catalog> catalogList = catImp.readFromfile();
-        if (catalogList==null){
+        if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
         for (Catalog cat : catalogList) {
@@ -79,7 +79,7 @@ public class CatalogMenu {
 
     public static void inputDataListCatalog(Scanner sc) {
         List<Catalog> catalogList = catImp.readFromfile();
-        if (catalogList==null){
+        if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
         System.out.println("Nhập số lượng danh mục cần thêm mới");
@@ -88,7 +88,7 @@ public class CatalogMenu {
             String strchoice = sc.nextLine();
             if (ShopValidate.checkempty(strchoice)) {
                 if (ShopValidate.checkInteger(strchoice)) {
-                     number = Integer.parseInt(strchoice);
+                    number = Integer.parseInt(strchoice);
                     break;
                 } else {
                     System.err.println("Vui lòng nhập vào 1 số nguyên");
@@ -112,135 +112,140 @@ public class CatalogMenu {
         if (productList == null) {
             productList = new ArrayList<>();
         }
-        List<Catalog> list = catImp.readFromfile();
-        if (list==null){
-            list = new ArrayList<>();
+        List<Catalog> catalogList = catImp.readFromfile();
+        if (catalogList == null) {
+            catalogList = new ArrayList<>();
         }
         System.out.println("Nhập ID danh mục cần cập nhật vào");
         int catId = 0;
         do {
-           String str = sc.nextLine();
-           if (ShopValidate.checkempty(str)){
-               if (ShopValidate.checkInteger(str)){
-                   catId = Integer.parseInt(str);
-                   break;
-               } else {
-                   System.out.println("Vui lòng nhập vào 1 số nguyên");
-               }
-           } else {
-               System.out.println("Không được để trống nhập ID vào");
-           }
-        } while (true);
-        for (Catalog cat:list) {
-            if (cat.getCatalogId()==catId){
-                System.out.println("Nhập vào tên danh mục muốn cập nhât");
-                do {
-                    String catalogName = sc.nextLine();
-                    if (ShopValidate.checkempty(catalogName)) {
-                        if (ShopValidate.checklenght(catalogName, 6, 30)) {
-                            boolean check = true;
-                            for (Catalog cat1 :list) {
-                                if (cat1.getCatalogName().equals(catalogName)) {
-                                    check = false;
-                                }
-                            }
-                            if (check) {
-                                list.get(catId).setCatalogName(catalogName);
-                                break;
-                            } else {
-                                System.err.println(ShopMessage.CATALOGMESSAGE_EXIST);
-                            }
-                        } else {
-                            System.err.println(ShopMessage.CATALOGMESSAGE_LENGHT);
-                        }
-                    } else {
-                        break;
-                    }
-                } while (true);
-                System.out.println("Nhập vào trạng thái danh mục");
-                System.out.println("1. Hoạt động");
-                System.out.println("2. Không hoạt động");
-                System.out.println("Lựa chọn của bạn là");
-                int choice = 0;
-                do {
-                    String str = sc.nextLine();
-                    if (ShopValidate.checkempty(str)) {
-                        if (ShopValidate.checkInteger(str)) {
-                            choice = Integer.parseInt(str);
-                            if (choice == 1) {
-                                list.get(catId).setCatalogStatus(true);
-                                break;
-                            } else if (choice == 2) {
-                                list.get(catId).setCatalogStatus(false);
-                                break;
-                            } else {
-                                System.err.println("Vui lòng chọn 1 hoặc 2");
-                            }
-                        } else {
-                            System.err.println("Vui lỏng nhập vào 1 số nguyên");
-                        }
-                    } else {
-                       break;
-                    }
-                } while (true);
-                List<Catalog> listchild = new ArrayList<>();
-                System.out.println("0. Danh mục gốc");
-                for (Catalog cat2 : list) {
-                    if (cat2.getCatalog() == null&&cat.isCatalogStatus()) {
-                        boolean check = true;
-                        for (Product pro: productList) {
-                            if (pro.getCatalog().getCatalogId()==cat.getCatalogId()){
-                                listchild.add(cat);
-                                check = false;
-                            }
-                        }
-                        if (check) {
-                            CatalogImp catalogList = new CatalogImp();
-                           catalogList.displayListCatalogData(cat, list, 0);
-                        }
-                    }
-                }
-                System.out.println("lựa chọn danh mục theo Id");
-                int catalogId = -1;
-                do {
-                    String str = sc.nextLine();
-                    catalogId = Integer.parseInt(str);
-                    if (ShopValidate.checkempty(str)) {
-                        if (ShopValidate.checkInteger(str)) {
-                            boolean check = false;
-                            for (Catalog cat4:listchild) {
-                                if (cat4.getCatalogId()==catalogId||catalogId==0){
-                                    check = true;
-                                }
-                            } if (check){
-                                break;
-                            } else {
-                                System.err.println("vui lòng chọn danh mục trong số các danh mục trên");
-                            }
-
-                        } else {
-                            System.err.println("Vui lòng nhập số nguyên vào");
-                        }
-                    } else {
-                        break;
-                    }
-                } while (true);
-                if (catalogId == 0){
-                    list.get(catalogId).setCatalog(null);
+            String str = sc.nextLine();
+            if (ShopValidate.checkempty(str)) {
+                if (ShopValidate.checkInteger(str)) {
+                    catId = Integer.parseInt(str);
+                    break;
                 } else {
-                    list.get(catalogId).setCatalog(listchild.get(catalogId));
+                    System.out.println("Vui lòng nhập vào 1 số nguyên");
                 }
             } else {
-                System.out.println("Không tìm thấy danh mục cần cập nhật");
+                System.out.println("Không được để trống nhập ID vào");
             }
+        } while (true);
+        boolean check = true;
+        for (Catalog cat : catalogList) {
+            if (cat.getCatalogId() == catId) {
+                check = false;
+                break;
+            }
+        }
+        if (check) {
+            System.out.println("Không tìm thấy danh mục");
+        } else {
+            System.out.println("Nhập vào tên danh mục muốn cập nhật");
+            do {
+                String catalogName = sc.nextLine();
+                if (ShopValidate.checkempty(catalogName)) {
+                    if (ShopValidate.checklenght(catalogName, 6, 30)) {
+                        boolean checkExist = true;
+                        for (Catalog cat : catalogList) {
+                            if (cat.getCatalogName().equals(catalogName)) {
+                                checkExist = false;
+                            }
+                        }
+                        if (checkExist) {
+                            catalogList.get(catId - 1).setCatalogName(catalogName);
+                            break;
+                        } else {
+                            System.err.println(ShopMessage.CATALOGMESSAGE_EXIST);
+                        }
+                    } else {
+                        System.err.println(ShopMessage.CATALOGMESSAGE_LENGHT);
+                    }
+                } else {
+                    break;
+                }
+            } while (true);
+            System.out.println("Bạn có muốn cập nhật trang thái không");
+            System.out.println("1. Có");
+            System.out.println("2. Không");
+            System.out.println("Lựa chọn của bạn là");
+            int choice = 0;
+            do {
+             String srt = sc.nextLine();
+             if (ShopValidate.checkempty(srt)){
+                 if (ShopValidate.checkInteger(srt)){
+                     choice = Integer.parseInt(srt);
+                     break;
+                 } else {
+                     System.err.println("Vui lòng nhập vào 1 số nguyên");
+                 }
+             } else {
+                 System.err.println("Không được để trống vui lòng nhập dữ liệu vào");
+             }
+            } while (true);
+            if (choice ==1){
+                catalogList.get(catId-1).setCatalogStatus(!catalogList.get(catId-1).isCatalogStatus());
+            }
+            List<Catalog> listchild = new ArrayList<>();
+            System.out.println("0. Danh mục gốc");
+            for (Catalog cat : catalogList) {
+                if (cat.isCatalogStatus()) {
+                    boolean check1 = true;
+                    for (Product pro : productList) {
+                        if (pro.getCatalog().getCatalogId() == cat.getCatalogId()) {
+                            check1 = false;
+                        }
+                    }
+                    if (check1) {
+                        listchild.add(cat);
+                        System.out.printf("%d. %s\n", cat.getCatalogId(), cat.getCatalogName());
+                    }
+                }
+            }
+            System.out.println("lựa chọn danh mục theo Id");
+            int catalogId = 0;
+            do {
+                String str = sc.nextLine();
+                catalogId =Integer.parseInt(str);
+                if (ShopValidate.checkempty(str)){
+                    if (ShopValidate.checkInteger(str)){
+                        boolean check2 = true;
+                        for (Catalog cat:listchild) {
+                            if (cat.getCatalogId()==catalogId){
+                                check2 = false;
+                            }
+                        }
+                        if (!check2){
+                            break;
+                        } else {
+                            System.out.println("Vui lòng chọn các danh mục ở trên");
+                        }
+                    }else {
+                        System.out.println("Vui lòng nhập vào 1 số nguyên");
+                    }
+                } else {
+                    System.out.println("Không được để trống");
+                }
+            } while (true);
+            if (catalogId == 0) {
+                catalogList.get(catId-1).setCatalog(null);
+            } else {
+                catalogList.get(catId-1).setCatalog(listchild.get(catalogId - 1));
+            }
+        }
+       boolean result = catImp.writeToFile(catalogList);
+        if (result){
+            System.out.println("Cập nhật thành công");
+        } else {
+            System.out.println("Cập nhật thất bại");
         }
     }
 
     public static void deleteCataloginlist(Scanner sc) {
         System.out.println("Nhập id danh mục bạn muốn xóa vào");
-        int catalogId  = 0;
+        int catalogId = 0;
         do {
-           String str = sc.nextLine();
+            String str = sc.nextLine();
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
                     catalogId = Integer.parseInt(str);
@@ -253,31 +258,33 @@ public class CatalogMenu {
             }
         } while (true);
 
-        boolean result =  catImp.delete(catalogId);
-        if (result){
+        boolean result = catImp.delete(catalogId);
+        if (result) {
             System.out.println("Xóa thành công");
         } else {
             System.out.println("Đã xảy ra lỗi xóa thất bại");
         }
     }
-    public static void searchCatalogByName(Scanner sc){
+
+    public static void searchCatalogByName(Scanner sc) {
         List<Catalog> catalogList = catImp.readFromfile();
-        if (catalogList==null){
+        if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
         System.out.println("Nhập tên danh mục muốn tìm kiêm vào");
         do {
             String catName = sc.nextLine();
-            if (ShopValidate.checkempty(catName)){
+            if (ShopValidate.checkempty(catName)) {
                 boolean check = true;
-                for (Catalog cat:catalogList) {
-                    if (cat.getCatalogName().equals(catName)){
-                        System.out.printf("%-10s %-30s  %-20s\n","Mã danh mục","Tên danh mục","Trạng thái");
+                for (Catalog cat : catalogList) {
+                    if (cat.getCatalogName().equals(catName)) {
+                        System.out.printf("%-10s %-30s  %-20s\n", "Mã danh mục", "Tên danh mục", "Trạng thái");
                         catImp.displayData(cat);
-                        check=false;
+                        check = false;
                         break;
                     }
-                } if (check){
+                }
+                if (check) {
                     System.out.println("Không tím thấy thư mục");
                     break;
                 }

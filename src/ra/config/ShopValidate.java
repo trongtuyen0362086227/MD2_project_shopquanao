@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class ShopValidate {
     public static boolean checklenght(String str,int min, int max){
-            if (str.trim().length()>=6&&str.trim().length()<=30){
+            if (str.trim().length()>=min&&str.trim().length()<=max){
                 return true;
             }
         return false;

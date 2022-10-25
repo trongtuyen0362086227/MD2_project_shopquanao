@@ -52,7 +52,7 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
         boolean returnData = false;
         for (int i = 0; i < catalogList.size(); i++) {
             if (catalogList.get(i).getCatalogId() == integer) {
-                catalogList.get(i).setCatalogStatus(!catalogList.get(i).isCatalogStatus());
+                catalogList.get(i).setCatalogStatus(false);
                 returnData = true;
                 break;
             }
@@ -186,7 +186,6 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                 }
                 if (check) {
                     listchild.add(cat);
-                    CatalogImp catalogImp = new CatalogImp();
                     System.out.printf("%d. %s\n", cat.getCatalogId(), cat.getCatalogName());
                 }
             }
