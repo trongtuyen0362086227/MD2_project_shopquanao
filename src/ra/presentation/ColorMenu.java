@@ -15,13 +15,22 @@ public class ColorMenu {
     public void displayColorMenu(Scanner sc) {
         boolean exit = true;
         do {
-            System.out.println("**********QUẢN LÝ MÀU SẮC**********");
-            System.out.println("1.Hiển thị danh sách màu sắc theo a>b");
-            System.out.println("2. Tạo mới màu săc");
-            System.out.println("3. Cập nhật màu sắc");
-            System.out.println("4. Xóa màu sắc");
-            System.out.println("5. Thoát");
-            System.out.print("Lựa chọn của bạn: \n");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |  *****************************     QUẢN LÝ MÀU SẮC  *****************************     |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                 1 .  Hiển thị danh sách màu sắc theo a>b                              |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                 2 .  Tạo mới màu săc                                                  |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                 3 . Cập nhật màu sắc                                                  |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                 4 . Xóa màu sắc                                                       |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                 5. Thoát                                                              |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.print("                                           |                            Lựa chọn của bạn:                                          |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+
             int choice = 0;
             do {
                 String strChoice = sc.nextLine();
@@ -69,7 +78,7 @@ public class ColorMenu {
                 return o1.getColorName().compareTo(o2.getColorName());
             }
         });
-        System.out.printf("%-10s %-30s %-20s\n", "Mã màu sắc", "Tên màu sắc", "trạng thái");
+        System.out.printf("%-30s %-30s %-30s\n", "Mã màu sắc", "Tên màu sắc", "trạng thái");
         for (Color color : colorList) {
             colorImp.displayData(color);
         }

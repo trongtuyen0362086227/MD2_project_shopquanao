@@ -15,41 +15,31 @@ public class UserMenu {
     public void displayMenuUser(Scanner sc) {
         boolean exit = true;
         do {
-            System.out.println("**********QUẢN LÝ TÀI KHOẢN **********");
-            System.out.println("1.Hiển thị danh sách tài khoản theo ngày tạo");
-            System.out.println("2. Thêm tài khoản quản trị");
-            System.out.println("3. Cập nhật tài khoản quản trị");
-            System.out.println("4. Cập nhật trạng thái tài khoản khác hàng");
-            System.out.println("5. Tìm kiếm tài khoản khách hàng theo tên đăng nhập hoặc tên chủ tài khoản");
-            System.out.println("6. Thoát");
-            System.out.print("Lựa chọn của bạn: \n");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |       ******************************QUẢN LÝ TÀI KHOẢN ***************************     |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |        1  . Hiển thị danh sách tài khoản theo ngày tạo                                |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |        2  . Thêm tài khoản quản trị                                                   |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |        3  . Cập nhật tài khoản quản trị                                               |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |        4  . Cập nhật trạng thái tài khoản khác hàng                                    |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |        5  . Tìm kiếm tài khoản khách hàng theo tên đăng nhập hoặc tên chủ tài khoản   |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |        6. Thoát                                                                       |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                                Lựa chọn của bạn:                                      |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+
+            int choice = 0;
             do {
                 String strChoice = sc.nextLine();
+                choice = Integer.parseInt(strChoice);
                 if (ShopValidate.checkempty(strChoice)) {
                     if (ShopValidate.checkInteger(strChoice)) {
-                        int choice = Integer.parseInt(strChoice);
-                        switch (choice) {
-                            case 1:
-                                UserMenu.displayListUserByDate();
-                                break;
-                            case 2:
-                                UserMenu.creatAdmimToListUser(sc);
-                                break;
-                            case 3:
-                                UserMenu.updateAdmin(sc);
-                                break;
-                            case 4:
-                                UserMenu.deleteUser(sc);
-                                break;
-                            case 5:
-                                UserMenu.searchByUserNameorUserFullName(sc);
-                                break;
-                            case 6:
-                                exit = false;
-                                break;
-                            default:
-                                System.err.println("Vui lòng chọn từ 1-6");
-                        }
+                        break;
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
                     }
@@ -57,6 +47,28 @@ public class UserMenu {
                     System.err.println("Không được để trống, vui lòng nhập lại");
                 }
             } while (true);
+            switch (choice) {
+                case 1:
+                    UserMenu.displayListUserByDate();
+                    break;
+                case 2:
+                    UserMenu.creatAdmimToListUser(sc);
+                    break;
+                case 3:
+                    UserMenu.updateAdmin(sc);
+                    break;
+                case 4:
+                    UserMenu.deleteUser(sc);
+                    break;
+                case 5:
+                    UserMenu.searchByUserNameorUserFullName(sc);
+                    break;
+                case 6:
+                    exit = false;
+                    break;
+                default:
+                    System.err.println("Vui lòng chọn từ 1-6");
+            }
         } while (exit);
     }
 
@@ -65,7 +77,7 @@ public class UserMenu {
         Collections.sort(userList, new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
-                return o1.getDate().compareTo(o2.getDate());
+                return o2.getDate().compareTo(o1.getDate());
             }
         });
         for (User user:userList) {
@@ -75,18 +87,13 @@ public class UserMenu {
     public static void creatAdmimToListUser(Scanner sc){
         List<User> userList = userImp.readFromfile();
         System.out.println("Nhập số lượng tài khoản quản trị muốn thêm vào");
+        int num = 0;
         do {
             String str = sc.nextLine();
+            num = Integer.parseInt(str);
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkInteger(str)) {
-                    int num = Integer.parseInt(str);
-                    for (int i = 0; i < num; i++) {
-                        System.out.println("Nhập dữ liệu cho tài khoản: " + (i + 1));
-                        UserImp userImp1 = new UserImp();
-                        User user = userImp1.inputData(sc);
-                        userList.add(user);
-                        userImp1.create(user);
-                    }
+                    break;
                 } else {
                     System.err.println("Vui lòng nhập vào 1 số nguyên");
                 }
@@ -94,6 +101,18 @@ public class UserMenu {
                 System.err.println("Không được để trống vui lòng nhập 1 số nguyên vào");
             }
         } while (true);
+        for (int i = 0; i < num; i++) {
+            System.out.println("Nhập dữ liệu cho tài khoản: " + (i + 1));
+            UserImp userImp1 = new UserImp();
+            User user = userImp1.inputDataAdmin(sc);
+            userList.add(user);
+            userImp.writeToFile(userList);
+        }
+        if (userImp.writeToFile(userList)){
+            System.out.println("Thêm mới tài khoản quản trị thành công");
+        } else {
+            System.out.println("Đã xảy ra lỗi");
+        }
     }
     public static void updateAdmin(Scanner sc){
         List<User> userList = userImp.readFromfile();

@@ -91,7 +91,7 @@ public class ColorImp implements IShop<Color, Integer> {
         do {
             String colorName = sc.nextLine();
             if (ShopValidate.checkempty(colorName)){
-                if (ShopValidate.checklenght(colorName,1,10)){
+                if (ShopValidate.checklenght(colorName,4,30)){
                      boolean check = true;
                     for (Color col:colorList) {
                         if (col.getColorName().equals(colorName)){
@@ -146,7 +146,7 @@ public class ColorImp implements IShop<Color, Integer> {
         if (color.isColorStatus()) {
             status = "Hoạt động";
         }
-        System.out.printf("%-10d. %-30s - %-20s\n", color.getColorId(), color.getColorName(), status);
+        System.out.printf("%-20d %-30s  %-20s\n", color.getColorId(), color.getColorName(), status);
     }
     public boolean searchById(int colorId){
         List<Color> list = readFromfile();

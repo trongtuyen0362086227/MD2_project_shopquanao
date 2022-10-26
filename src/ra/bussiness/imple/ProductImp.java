@@ -156,7 +156,6 @@ public class ProductImp implements IProduct<Product, Integer> {
                     }
                 } else {
                     System.err.println("Vui lòng nhập vào một số thực");
-
                 }
             } else {
                 System.err.println(ShopMessage.PRODUCTDISCOUNT_MESSAGE_EMPTY);
@@ -190,7 +189,7 @@ public class ProductImp implements IProduct<Product, Integer> {
         do {
             ColorImp colorImp = new ColorImp();
             List<Color> colorList = colorImp.readFromfile();
-            if (colorList.size() == 0) {
+            if (colorList==null) {
                 colorList = new ArrayList<>();
             }
             for (Color color : colorList) {
@@ -277,7 +276,7 @@ public class ProductImp implements IProduct<Product, Integer> {
                     System.err.println("Không được để trống");
                 }
             } while (true);
-            if (choice3 > 0 && choice3 < sizeList.size()) {
+            if (choice3 > 0 && choice3 <= sizeList.size()) {
 
                 boolean check = false;
                 for (Size sizeExist :sizeList1 ) {
@@ -340,7 +339,7 @@ public class ProductImp implements IProduct<Product, Integer> {
             choice5 = Integer.parseInt(strchoice5);
             if (ShopValidate.checkempty(strchoice5)) {
                 if (ShopValidate.checkInteger(strchoice5)) {
-                    if (choice5 > 0 && choice5 < listCatalogChild.size()) {
+                    if (choice5 > 0 && choice5 <= listCatalogChild.size()) {
                         productNew.setCatalog(listCatalogChild.get(choice5 - 1));
                         break;
                     } else {
@@ -379,6 +378,7 @@ public class ProductImp implements IProduct<Product, Integer> {
                 System.err.println("Không được để trống vui lòng lựa chọn");
             }
         } while (true);
+        productNew.setExportPrice(calExportPrice(productNew.getPrice(),productNew.getDiscount()));
         Date date = new Date();
         productNew.setDate(date);
         return productNew;
@@ -392,9 +392,9 @@ public class ProductImp implements IProduct<Product, Integer> {
         }
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         String strDate = formatter.format(product.getDate());
-       System.out.printf("%-10s - %-20s - %-10f - %-10f - %-30s\n",product.getPruductId(),product.getProductName(),product.getPrice(),product.getExportPrice(),product.getTitle());
-//       System.out.printf("%-20s - %-30s - %-30s\n",product.getContent(),displayListColor(product),displayListSize(product));
-//       System.out.printf("%-15s - %-15s - %-15s\n",product.getCatalog(),strDate,status);
+       System.out.printf("%-10s - %-20s - %-10.2f - %-10f - %-30s\n",product.getPruductId(),product.getProductName(),product.getPrice(),product.getDiscount(),product.getTitle());
+       System.out.printf("%-20s - %-30s - %-30s\n",product.getContent(),displayListColor(product),displayListSize(product));
+       System.out.printf("%-15s - %-15s - %-15s\n",product.getCatalog(),strDate,status);
     }
 
     @Override
@@ -440,7 +440,7 @@ public class ProductImp implements IProduct<Product, Integer> {
     public static String displayListColor(Product pro){
         String str = "";
         for (Color color:pro.getProductColorList()) {
-             str += color+" - ";
+             str += color+", ";
         }
         return str;
     }

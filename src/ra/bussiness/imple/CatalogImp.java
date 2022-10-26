@@ -145,13 +145,17 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                     System.err.println(ShopMessage.CATALOGMESSAGE_LENGHT);
                 }
             } else {
-                System.err.println(ShopMessage.CATALOGMESSAGE_EMPTY);
+                System.err.println(ShopMessage.CHECK_EMPTY);
             }
         } while (true);
-        System.out.println("Nhập vào trạng thái danh mục");
-        System.out.println("1. Hoạt động");
-        System.out.println("2. Không hoạt động");
-        System.out.println("Lựa chọn của bạn là");
+        System.out.println("                                         |---------------------------------------------------------------------------------------|");
+        System.out.println("                                         |                              Nhập vào trạng thái danh mục                             |");
+        System.out.println("                                         |---------------------------------------------------------------------------------------|");
+        System.out.println("                                         |            1. Hoạt động                |       2. Không hoạt động                     |");
+        System.out.println("                                         |---------------------------------------------------------------------------------------|");
+        System.out.println("                                         |                                 Lựa chọn của bạn là                                   |");
+        System.out.println("                                         |---------------------------------------------------------------------------------------|");
+
         int choice = 0;
         do {
             String str = sc.nextLine();
@@ -165,16 +169,17 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                         catalogNew.setCatalogStatus(false);
                         break;
                     } else {
-                        System.err.println("Vui lòng chọn 1 hoặc 2");
+                        System.err.println("                                                Vui lòng chọn 1 hoặc 2");
                     }
                 } else {
-                    System.err.println("Vui lỏng nhập vào 1 số nguyên");
+                    System.err.println(ShopMessage.CHECK_INTERGER);
                 }
             } else {
-                System.err.println("Không được để trống vui lòng lựa chọn");
+                System.err.println(ShopMessage.CHECK_EMPTY);
             }
         } while (true);
         List<Catalog> listchild = new ArrayList<>();
+        int cnt = 1;
         System.out.println("0. Danh mục gốc");
         for (Catalog cat : catalogList) {
             if (cat.isCatalogStatus()) {
@@ -186,7 +191,8 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
                 }
                 if (check) {
                     listchild.add(cat);
-                    System.out.printf("%d. %s\n", cat.getCatalogId(), cat.getCatalogName());
+                    System.out.printf("%d. %s\n", cnt, cat.getCatalogName());
+                    cnt++;
                 }
             }
         }
@@ -197,22 +203,26 @@ public class CatalogImp implements Icatalog<Catalog, Integer> {
            catalogId =Integer.parseInt(str);
            if (ShopValidate.checkempty(str)){
                if (ShopValidate.checkInteger(str)){
-                   boolean check = true;
-                   for (Catalog cat:listchild) {
-                       if (cat.getCatalogId()==catalogId){
-                           check = false;
-                       }
-                   }
-                   if (!check){
+                   if (catalogId==0){
                        break;
                    } else {
-                       System.out.println("Vui lòng chọn các danh mục ở trên");
+                       boolean check = true;
+                       for (Catalog cat:listchild) {
+                           if (catalogId<=listchild.size()&&catalogId>0){
+                               check = false;
+                           }
+                       }
+                       if (!check){
+                           break;
+                       } else {
+                           System.err.println("Vui lòng chọn các danh mục ở trên");
+                       }
                    }
                }else {
-                   System.out.println("Vui lòng nhập vào 1 số nguyên");
+                   System.err.println(ShopMessage.CHECK_INTERGER);
                }
            } else {
-               System.out.println("Không được để trống");
+               System.err.println(ShopMessage.CHECK_EMPTY);
            }
         } while (true);
         if (catalogId == 0) {

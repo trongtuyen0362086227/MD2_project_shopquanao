@@ -22,14 +22,22 @@ public class ProductMenu {
     public static void displayProductMenu(Scanner sc) {
         boolean checkexit = true;
         do {
-            System.out.println("************ QUẢN LÝ SẢN PHẨM *************");
-            System.out.println("1. Danh sách sản phẩm được sắp xếp theo danh mục sản phẩm");
-            System.out.println("2. Thêm mới sản phẩm");
-            System.out.println("3. Cập nhật sản phẩm");
-            System.out.println("4. Xóa sản phẩm");
-            System.out.println("5. Thoát");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         | *************************           QUẢN LÝ SẢN PHẨM    ******************************|");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |       1. Danh sách sản phẩm được sắp xếp theo danh mục sản phẩm                       |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |       2. Thêm mới sản phẩm                                                            |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |       3. Cập nhật sản phẩm                                                            |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |       4. Xóa sản phẩm                                                                 |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |       5. Thoát                                                                        |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                                    Lựa chọn cửa bạn là                                |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
 
-            System.out.println("Lựa chọn cửa bạn là");
             int choice = 0;
             do {
                 String str = sc.nextLine();
@@ -104,7 +112,7 @@ public class ProductMenu {
             productList = new ArrayList<>();
         }
         List<Size> sizeList1 = product.getProductSizeList();
-        if (sizeList1==null){
+        if (sizeList1 == null) {
             sizeList1 = new ArrayList<>();
         }
         System.out.println("Nhập Id sản phẩm bạn muốn cập nhật vào");
@@ -124,7 +132,8 @@ public class ProductMenu {
                 index = productList.indexOf(pro);
                 check = false;
             }
-        } if (check){
+        }
+        if (check) {
             System.err.println("Không tìm thấy sản phẩm");
         } else {
             System.out.println("Nhập tên sản phẩm vào muốn cập nhật vào");
@@ -152,13 +161,14 @@ public class ProductMenu {
                 }
             } while (true);
             System.out.println("Nhập giá sản phẩm vào");
+            float price = 0;
             do {
                 String strPrice = sc.nextLine();
-                float price = Float.parseFloat(strPrice);
                 if (ShopValidate.checkempty(strPrice)) {
                     if (ShopValidate.checkfloat(strPrice)) {
+                        price = Float.parseFloat(strPrice);
                         if (price > 0) {
-                           productList.get(index).setPrice(price);
+                            productList.get(index).setPrice(price);
                             break;
                         } else {
                             System.err.println("Vui lòng nhập giá sản phẩm lớn hơn 0");
@@ -167,16 +177,18 @@ public class ProductMenu {
                         System.err.println("Vui lòng nhập vào một số thực");
                     }
                 } else {
-                    System.err.println(ShopMessage.PRODUCTPRICE_MESSAGE_EMPTY);
+                    break;
                 }
             } while (true);
             System.out.println("Nhập phần trăm giảm giá vào");
+            float discount = 0;
             do {
                 String strDiscount = sc.nextLine();
-                float discount = Float.parseFloat(strDiscount);
+
                 if (ShopValidate.checkempty(strDiscount)) {
                     if (ShopValidate.checkfloat(strDiscount)) {
                         if (discount >= 0 && discount <= 100) {
+                            discount = Float.parseFloat(strDiscount);
                             productList.get(index).setDiscount(discount);
                             break;
                         } else {
@@ -187,7 +199,7 @@ public class ProductMenu {
 
                     }
                 } else {
-                    System.err.println(ShopMessage.PRODUCTDISCOUNT_MESSAGE_EMPTY);
+                    break;
                 }
             } while (true);
             System.out.println("Nhập tiêu đề sản phẩm vào muốn cập nhật vào");
@@ -201,7 +213,7 @@ public class ProductMenu {
                         System.err.println(ShopMessage.PRODUCTTITLE_MESSAGE_LENGHT);
                     }
                 } else {
-                break;
+                    break;
                 }
             } while (true);
             System.out.println("Nhập mô tả sản phẩm vào");
@@ -211,7 +223,7 @@ public class ProductMenu {
                     productList.get(index).setContent(content);
                     break;
                 } else {
-                   break;
+                    break;
                 }
             } while (true);
             System.out.println("Vui lòng chọn các màu sắc của sản phẩm");
@@ -226,65 +238,66 @@ public class ProductMenu {
                 }
                 System.out.println("chọn màu sắc");
                 int choice = 0;
-            do {
-                String strchoice = sc.nextLine();
-                choice = Integer.parseInt(strchoice);
-                if (ShopValidate.checkempty(strchoice)) {
-                    if (ShopValidate.checkInteger(strchoice)) {
-                        break;
-                    } else {
-                        System.err.println("Vui lòng nhập vào 1 số nguyên");
-                    }
-                } else {
-                    System.err.println("Danh sác màu sắc không được để trống, vui lòng lựa chọn màu sắc");
-                }
-            } while (true);
-            if (choice > 0 && choice <= colorList.size()) {
-
-                if (colorList1==null){
-                    colorList1 = new ArrayList<>();
-                }
-                boolean checkColorExist = false;
-                for (Color colorExist : colorList1) {
-                    if (colorExist.getColorId() == colorList.get(choice - 1).getColorId()) {
-                        checkColorExist = true;
-                    }
-                }
-                if (!checkColorExist) {
-                    colorList1.add(colorList.get(choice - 1));
-                } else {
-                    System.err.println("Màu sắc đã tồn tại trọng danh sách màu sắc");
-                }
-                System.out.println("Bạn có muốn chọn thêm màu sắc không: ");
-                System.out.println("1. Có");
-                System.out.println("2. Không");
-                System.out.print("Lựa chọn của bạn là: ");
-                int choice2 = 0;
                 do {
-                    String strchoice2 = sc.nextLine();
-                    choice2 = Integer.parseInt(strchoice2);
-                    if (ShopValidate.checkempty(strchoice2)) {
-                        if (ShopValidate.checkInteger(strchoice2)) {
+                    String strchoice = sc.nextLine();
+                    if (ShopValidate.checkempty(strchoice)) {
+                        if (ShopValidate.checkInteger(strchoice)) {
+                            choice = Integer.parseInt(strchoice);
                             break;
                         } else {
                             System.err.println("Vui lòng nhập vào 1 số nguyên");
                         }
                     } else {
-                        System.err.println("Không được để trống vui lòng lựa chọn 1 hoặc 2");
+                        break;
                     }
                 } while (true);
-                if (choice2 != 1) {
-                    break;
+                if (choice > 0 && choice <= colorList.size()) {
+
+                    if (colorList1 == null) {
+                        colorList1 = new ArrayList<>();
+                    }
+                    boolean checkColorExist = false;
+                    for (Color colorExist : colorList1) {
+                        if (colorExist.getColorId() == colorList.get(choice - 1).getColorId()) {
+                            checkColorExist = true;
+                        }
+                    }
+                    if (!checkColorExist) {
+                        colorList1.add(colorList.get(choice - 1));
+                    } else {
+                        System.err.println("Màu sắc đã tồn tại trọng danh sách màu sắc");
+                    }
+                    System.out.println("Bạn có muốn chọn thêm màu sắc không: ");
+                    System.out.println("1. Có");
+                    System.out.println("2. Không");
+                    System.out.print("Lựa chọn của bạn là: ");
+                    int choice2 = 0;
+                    do {
+                        String strchoice2 = sc.nextLine();
+
+                        if (ShopValidate.checkempty(strchoice2)) {
+                            if (ShopValidate.checkInteger(strchoice2)) {
+                                choice2 = Integer.parseInt(strchoice2);
+                                break;
+                            } else {
+                                System.err.println("Vui lòng nhập vào 1 số nguyên");
+                            }
+                        } else {
+                            break;
+                        }
+                    } while (true);
+                    if (choice2 != 1) {
+                        break;
+                    }
+                } else {
+                    System.err.println("Vui lòng chọn màu sắc có trong danh sách");
                 }
-            } else {
-                System.err.println("Vui lòng chọn màu sắc có trong danh sách");
-            }
-        } while (true);
+            } while (true);
             System.out.println("Chọn danh sách các kích cỡ");
             do {
                 SizeImp sizeImp = new SizeImp();
                 List<Size> sizeList = sizeImp.readFromfile();
-                if (sizeImp==null){
+                if (sizeImp == null) {
                     sizeList = new ArrayList<>();
                 }
                 for (Size size : sizeList) {
@@ -294,21 +307,21 @@ public class ProductMenu {
                 int choice3;
                 do {
                     String strchoice3 = sc.nextLine();
+                    choice3 = Integer.parseInt(strchoice3);
                     if (ShopValidate.checkempty(strchoice3)) {
                         if (ShopValidate.checkInteger(strchoice3)) {
-                            choice3 = Integer.parseInt(strchoice3);
                             break;
                         } else {
                             System.err.println("Vui lòng nhập vào 1 số nguyên");
                         }
                     } else {
-                        System.err.println("Không được để trống");
+                       break;
                     }
                 } while (true);
                 if (choice3 > 0 && choice3 < sizeList.size()) {
 
                     boolean check1 = false;
-                    for (Size sizeExist :sizeList1 ) {
+                    for (Size sizeExist : sizeList1) {
                         if (sizeExist.getSizeId() == sizeList.get(choice3 - 1).getSizeId()) {
                             check1 = true;
                         }
@@ -345,40 +358,45 @@ public class ProductMenu {
             } while (true);
             CatalogImp catalogImp = new CatalogImp();
             List<Catalog> catalogList = catalogImp.readFromfile();
-            if (catalogList==null){
+            if (catalogList == null) {
                 catalogList = new ArrayList<>();
             }
             List<Catalog> listCatalogChild = new ArrayList<>();
-            int cnt = 1;
             for (Catalog cat : catalogList) {
                 if (ProductImp.checkCatalogNotChild(cat, catalogList)) {
-                    if (cat.isCatalogStatus()){
+                    if (cat.isCatalogStatus()) {
                         listCatalogChild.add(cat);
                     }
                 }
             }
             for (Catalog cat : listCatalogChild) {
-                System.out.printf("%d. %s \n", cnt, cat.getCatalogName());
-                cnt++;
+                System.out.printf("%d. %s \n", cat.getCatalogId(), cat.getCatalogName());
             }
             System.out.println("chọn danh mục sản phẩm");
             int choice5;
             do {
                 String strchoice5 = sc.nextLine();
-                choice5 = Integer.parseInt(strchoice5);
                 if (ShopValidate.checkempty(strchoice5)) {
                     if (ShopValidate.checkInteger(strchoice5)) {
-                        if (choice5 > 0 && choice5 < listCatalogChild.size()) {
-                            productList.get(index).setCatalog(listCatalogChild.get(choice5 - 1));
-                            break;
-                        } else {
+                        choice5 = Integer.parseInt(strchoice5);
+                        boolean check1 = true;
+                        for (Catalog cat : listCatalogChild) {
+                            if (choice5 == cat.getCatalogId()) {
+                                productList.get(index).setCatalog(listCatalogChild.get(choice5 - 1));
+                                check1 = false;
+                                break;
+                            }
+                        }
+                        if (check1) {
                             System.err.println("Danh mục không tồn tại vui lòng chọn danh mục khác");
+                        } else {
+                            break;
                         }
                     } else {
                         System.err.println("Vui lòng nhập vào 1 số nguyên");
                     }
                 } else {
-                    System.err.println("Không được để trống vui lòng lựa chọn danh mục");
+                   break;
                 }
             } while (true);
             System.out.println("Nhập vào trạng thái sản phẩm");
@@ -441,7 +459,7 @@ public class ProductMenu {
     public static void displayListCatalogAndProduct(Catalog root, List<Catalog> list, int cnt) {
         ProductImp proImp = new ProductImp();
         List<Product> productList = proImp.readFromfile();
-        if (productList==null){
+        if (productList == null) {
             productList = new ArrayList<>();
         }
         for (int i = 0; i < cnt; i++) {
@@ -462,24 +480,30 @@ public class ProductMenu {
         if (listchild.size() != 0) {
             cnt++;
         }
+        int cnt1 = cnt;
         for (Catalog cat : listchild) {
             displayListCatalogAndProduct(cat, list, cnt);
-            for (Product pro:productList) {
-                if (pro.getCatalog().getCatalogId()==cat.getCatalogId()&&ProductImp.checkCatalogNotChild(cat,list)){
+            int cntproduct = cnt + 1;
+            for (Product pro : productList) {
+                if (pro.getCatalog().getCatalogId() == cat.getCatalogId() && ProductImp.checkCatalogNotChild(cat, list)) {
+                    for (int i = 0; i < cntproduct; i++) {
+                        System.out.printf("\t");
+                    }
                     proImp.displayData(pro);
                 }
             }
         }
     }
-    public static void displayProductByCatalog(){
+
+    public static void displayProductByCatalog() {
         CatalogImp catImp = new CatalogImp();
         List<Catalog> catalogList = catImp.readFromfile();
-        if (catalogList == null){
+        if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
-        for (Catalog cat:catalogList) {
-            if (cat.getCatalog()==null){
-                displayListCatalogAndProduct(cat,catalogList,0);
+        for (Catalog cat : catalogList) {
+            if (cat.getCatalog() == null) {
+                displayListCatalogAndProduct(cat, catalogList, 0);
             }
         }
     }

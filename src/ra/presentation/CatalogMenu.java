@@ -18,14 +18,24 @@ public class CatalogMenu {
     public void displayCatalogMenu(Scanner sc) {
         boolean exit = true;
         do {
-            System.out.println("**********QUẢN LÝ DANH MỤC**********");
-            System.out.println("1.Hiển thị danh sách danh mục theo cây danh mục");
-            System.out.println("2. Tạo mới danh mục");
-            System.out.println("3. Cập nhật danh mục");
-            System.out.println("4. Xóa danh mục");
-            System.out.println("5. Tìm kiếm sản phẩm theo tên");
-            System.out.println("6. Thoát");
-            System.out.print("Lựa chọn của bạn: \n");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |*************************              QUẢN LÝ DANH MỤC          **********************|");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                     1.Hiển thị danh sách danh mục theo cây danh mục                   |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                     2. Tạo mới danh mục                                               |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                     3. Cập nhật danh mục                                              |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                     4. Xóa danh mục                                                   |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                     5. Tìm kiếm danh mục theo tên                                     |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                     6. Thoát                                                          |");
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+            System.out.println("                                         |                                Lựa chọn của bạn:                                      |") ;
+            System.out.println("                                         |---------------------------------------------------------------------------------------|");
+
             int choice = 0;
             do {
                 String strChoice = sc.nextLine();
@@ -104,7 +114,7 @@ public class CatalogMenu {
             }
         } while (true);
         for (int i = 0; i < number; i++) {
-            System.out.println("Nhập thông tin cho danh mục thứ" + (i + 1));
+            System.out.println("Nhập thông tin cho danh mục thứ: " + (i + 1));
             CatalogImp catalogImp = new CatalogImp();
             Catalog cat = catalogImp.inputData(sc);
             catalogList.add(cat);
@@ -193,6 +203,7 @@ public class CatalogMenu {
                 catalogList.get(catId-1).setCatalogStatus(!catalogList.get(catId-1).isCatalogStatus());
             }
             List<Catalog> listchild = new ArrayList<>();
+            int count = 1;
             System.out.println("0. Danh mục gốc");
             for (Catalog cat : catalogList) {
                 if (cat.isCatalogStatus()) {
@@ -204,7 +215,8 @@ public class CatalogMenu {
                     }
                     if (check1) {
                         listchild.add(cat);
-                        System.out.printf("%d. %s\n", cat.getCatalogId(), cat.getCatalogName());
+                        System.out.printf("%d. %s\n", count, cat.getCatalogName());
+                        count++;
                     }
                 }
             }
@@ -217,7 +229,7 @@ public class CatalogMenu {
                     if (ShopValidate.checkInteger(str)){
                         boolean check2 = true;
                         for (Catalog cat:listchild) {
-                            if (cat.getCatalogId()==catalogId){
+                            if (catalogId==cat.getCatalogId()){
                                 check2 = false;
                             }
                         }
@@ -257,7 +269,7 @@ public class CatalogMenu {
                     catalogId = Integer.parseInt(str);
                     break;
                 } else {
-                    System.err.println("Vui lòng nhạp vào 1 số nguyên");
+                    System.err.println("Vui lòng nhâp vào 1 số nguyên");
                 }
             } else {
                 System.err.println("Không được để trống");
@@ -277,14 +289,14 @@ public class CatalogMenu {
         if (catalogList == null) {
             catalogList = new ArrayList<>();
         }
-        System.out.println("Nhập tên danh mục muốn tìm kiêm vào");
+        System.out.println("Nhập tên danh mục muốn tìm kiếm vào");
         do {
             String catName = sc.nextLine();
             if (ShopValidate.checkempty(catName)) {
                 boolean check = true;
                 for (Catalog cat : catalogList) {
                     if (cat.getCatalogName().equals(catName)) {
-                        System.out.printf("%-10s %-30s  %-20s\n", "Mã danh mục", "Tên danh mục", "Trạng thái");
+                        System.out.printf("%-30s %-30s  %-30s\n", "Mã danh mục", "Tên danh mục", "Trạng thái");
                         catImp.displayData(cat);
                         check = false;
                         break;

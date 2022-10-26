@@ -2,6 +2,7 @@ package ra.config;
 
 public class ShopConstanst {
     public static final String URL_CATALOG_FILE = "C:\\SAVE\\MD2_Project_shopquanao\\src\\ra\\data\\catalog.txt";
+    public static final String URL_LOGIN_FILE = "C:\\SAVE\\MD2_Project_shopquanao\\src\\ra\\data\\UserLogin.txt";
 
     public static final String URL_COLOR_FILE ="C:\\SAVE\\MD2_Project_shopquanao\\src\\ra\\data\\color.txt";
     public static final String URL_SIZE_FILE ="C:\\SAVE\\MD2_Project_shopquanao\\src\\ra\\data\\size.txt";
