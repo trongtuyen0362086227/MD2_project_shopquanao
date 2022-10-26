@@ -198,9 +198,9 @@ public class UserImp implements IUser<User, Integer> {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         String strDate = formatter.format(user.getDate());
 
-        System.out.printf("Mã tài khoản: %-10d - Tên đăng nhập: %-20s - Tên chủ tài khoản %-20s\n", user.getUserId(), user.getUserName(), user.getFullName());
-        System.out.printf("Ngày tạo tk: %-20s - Email: %-30s - STĐ: %-15s\n", strDate, user.getUserEmail(), user.getUserPhoneNumber());
-        System.out.printf("Trạng thái: %-20s - \n", status);
+        System.out.printf("Mã tài khoản: %-10d | Tên đăng nhập: %-20s | Tên chủ tài khoản %-20s\n", user.getUserId(), user.getUserName(), user.getFullName());
+        System.out.printf("Ngày tạo tk: %-20s | Email: %-30s | STĐ: %-15s\n", strDate, user.getUserEmail(), user.getUserPhoneNumber());
+        System.out.printf("Trạng thái: %-20s  \n", status);
     }
 
     @Override

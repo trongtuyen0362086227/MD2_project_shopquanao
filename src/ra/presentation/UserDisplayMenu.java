@@ -330,7 +330,7 @@ public class UserDisplayMenu {
             String str = sc.nextLine();
             if (ShopValidate.checkempty(str)) {
                 if (ShopValidate.checkfloat(str)) {
-                    maxPrice = Integer.parseInt(str);
+                    maxPrice = Float.parseFloat(str);
                     break;
                 } else {
                     System.err.println("Vui lòng nhập 1 số thục vào");
@@ -341,7 +341,9 @@ public class UserDisplayMenu {
         } while (true);
         List<Product> listNew = new ArrayList<>();
         boolean check = true;
+
         for (Product pro : productList) {
+            proImp.calExportPrice(pro);
             if (pro.getExportPrice() >= minPrice && pro.getExportPrice() <= maxPrice) {
                 listNew.add(pro);
                 check = false;

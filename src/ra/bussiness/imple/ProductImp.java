@@ -378,7 +378,7 @@ public class ProductImp implements IProduct<Product, Integer> {
                 System.err.println("Không được để trống vui lòng lựa chọn");
             }
         } while (true);
-        productNew.setExportPrice(calExportPrice(productNew.getPrice(),productNew.getDiscount()));
+        productNew.setExportPrice(calExportPrice(productNew));
         Date date = new Date();
         productNew.setDate(date);
         return productNew;
@@ -390,11 +390,33 @@ public class ProductImp implements IProduct<Product, Integer> {
         if (product.isProductStatus()) {
             status = "Đang bán";
         }
+        product.setExportPrice(calExportPrice(product));
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         String strDate = formatter.format(product.getDate());
-       System.out.printf("%-10s - %-20s - %-10.2f - %-10f - %-30s\n",product.getPruductId(),product.getProductName(),product.getPrice(),product.getDiscount(),product.getTitle());
-       System.out.printf("%-20s - %-30s - %-30s\n",product.getContent(),displayListColor(product),displayListSize(product));
-       System.out.printf("%-15s - %-15s - %-15s\n",product.getCatalog(),strDate,status);
+        System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
+        System.out.printf("|   %-35s%-35s%-30s%-35s%-30s\n", "Mã sản phẩm", "Tên sản phẩm", "Giá sản phẩm", "Phần trăm giảm giá", "Giá bán sản phẩm");
+        System.out.printf("|   %-35s%-35s%-30.2f%-35f%-30.2f\n", product.getPruductId(), product.getProductName(), product.getPrice(), product.getDiscount(), product.getExportPrice());
+        System.out.printf("|   %-35s%-35s%-30s%-35s%-30s\n", "Tiêu đề", "Mô tả", "Danh mục", "Trạng thái", "Ngày nhập sản phẩm");
+        System.out.printf("|   %-35s%-35s%-30s%-35s%-30s\n", product.getTitle(), product.getContent(), product.getCatalog().getCatalogName(), status, strDate);
+        System.out.println("|   Color: ");
+        List<Color> colorList = product.getProductColorList();
+        if (colorList==null){
+            colorList = new ArrayList<>();
+        }
+        for (Color col : colorList) {
+            System.out.print("|   " + col.getColorName() + "\t");
+        }
+        System.out.println();
+        System.out.println("|   Size: ");
+        List<Size> sizeList = product.getProductSizeList();
+        if (sizeList==null){
+            sizeList = new ArrayList<>();
+        }
+        for (Size size : sizeList) {
+            System.out.print("|   " + size.getSizeName() + "\t");
+        }
+        System.out.println();
+        System.out.println("*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*");
     }
 
     @Override
@@ -419,8 +441,8 @@ public class ProductImp implements IProduct<Product, Integer> {
     }
 
     @Override
-    public float calExportPrice(float price,float discount) {
-        float exportPrice = price*(100-discount)/100;
+    public float calExportPrice(Product product) {
+        float exportPrice = product.getPrice()*(100-product.getDiscount())/100;
         return exportPrice;
     }
 
